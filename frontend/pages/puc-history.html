@@ -664,7 +664,6 @@
         </div>
     </div>
 
-    <script src="../js/data.js"></script>
     <script src="../js/dashboard.js"></script>
     <script>
         (function() {
@@ -674,32 +673,53 @@
             function pad(n, w){ return String(n).padStart(w||2,'0'); }
             function dmy(d){ return pad(d.getDate())+' '+d.toLocaleString('en-IN',{month:'short'})+' '+d.getFullYear(); }
 
-            const PUC_DATA = ((window.VehicleData && VehicleData.PUC_DATA) || []).map(function(item){
-                return {
-                    i: item.i,
-                    reg: item.reg,
-                    certNo: item.certNo,
-                    name: item.name,
-                    phone: item.phone,
-                    carModel: item.carModel,
-                    center: item.center,
-                    mach: item.mach,
-                    fuel: item.fuel,
-                    testDateIso: item.testDateIso,
-                    testDate: item.testDate,
-                    validDateIso: item.validDateIso,
-                    validDate: item.validDate,
-                    co: item.co, hc: item.hc, smoke: item.smoke,
-                    status: item.status, fee: item.fee,
-                    expiringSoon: !!item.expiringSoon
-                };
-            });
-
+            let PUC_DATA = [];
             const state = {
                 page: 1,
-                filtered: PUC_DATA.slice(),
+                filtered: [],
                 activeCert: null
             };
+
+            async function fetchPUCHistory() {
+                try {
+                    const response = await fetch('/puc/history');
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        PUC_DATA = result.data.map(function(item){
+                            const testDate = new Date(item.testDateTime);
+                            const validFrom = new Date(item.validFrom);
+                            const validUpto = new Date(item.validUpto);
+                            return {
+                                i: item.pucId,
+                                reg: item.vehicleNo,
+                                certNo: item.certificateNumber,
+                                name: item.ownerName,
+                                phone: '',
+                                carModel: item.vehicleType,
+                                center: item.centerName,
+                                mach: '',
+                                fuel: item.fuelType,
+                                testDateIso: testDate.toISOString().split('T')[0],
+                                testDate: dmy(testDate),
+                                validDateIso: validUpto.toISOString().split('T')[0],
+                                validDate: dmy(validUpto),
+                                co: item.coPercent || 0,
+                                hc: item.hcPpm || 0,
+                                smoke: item.smokeDensity || 0,
+                                status: item.status === 'Valid' ? 'Pass' : (item.status === 'Expired' ? 'Expired' : 'Fail'),
+                                fee: 0,
+                                expiringSoon: false
+                            };
+                        });
+                        state.filtered = PUC_DATA.slice();
+                        renderTable();
+                    } else {
+                        console.error('Failed to fetch PUC history:', result.message);
+                    }
+                } catch (error) {
+                    console.error('Error fetching PUC history:', error);
+                }
+            }
 
             function getEl(id) {
                 return document.getElementById(id);
@@ -1039,7 +1059,9 @@
                 const auth = DashboardApp.init(['PUC_CENTER'], 'Authorized PUC Testing Center', 'history');
 
                 if (!auth) return;
-                initPage();
+                fetchPUCHistory().then(() => {
+                    initPage();
+                });
             });
         })();
     </script>

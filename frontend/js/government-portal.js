@@ -1,5 +1,5 @@
 // Government Portal JavaScript
-// SmartSarthi - Interactive functionality
+// Smart Saarthi - Interactive functionality
 
 document.addEventListener('DOMContentLoaded', function() {
     // Font size controls
@@ -176,6 +176,32 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // Mobile three-dots menu toggle
+    const mobileToggle = document.getElementById('mobileMenuToggle');
+    const navMoreItems = document.getElementById('navMoreItems');
+
+    if (mobileToggle && navMoreItems) {
+        mobileToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            navMoreItems.classList.toggle('open');
+        });
+
+        // Close the mobile menu when clicking outside of it
+        document.addEventListener('click', function(e) {
+            if (!navMoreItems.contains(e.target) && !mobileToggle.contains(e.target)) {
+                navMoreItems.classList.remove('open');
+            }
+        });
+
+        // Close mobile menu after clicking a final link (dropdown item or non-dropdown nav item)
+        navMoreItems.querySelectorAll('.dropdown-item, .nav-item:not(.dropdown)').forEach(function(item) {
+            item.addEventListener('click', function() {
+                navMoreItems.classList.remove('open');
+            });
+        });
+    }
+
     // Console log for debugging
-    console.log('SmartSarthi Government Portal loaded successfully');
+    console.log('Smart Saarthi Government Portal loaded successfully');
 });

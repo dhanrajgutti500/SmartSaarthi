@@ -45,9 +45,7 @@ const DashboardApp = (function() {
     const SIDEBAR_MENUS = {
         POLICE: [
             { key: 'overview', label: 'Overview', icon: SIDEBAR_ICONS.overview, href: 'police-dashboard.html' },
-            { key: 'verifyVehicle', label: 'Verify Vehicle', icon: SIDEBAR_ICONS.verifyVehicle, href: 'verify-vehicle.html' },
             { key: 'anprScanner', label: 'ANPR Scanner', icon: SIDEBAR_ICONS.anprScanner, href: 'anpr-scanner-new.html' },
-            { key: 'issueChallan', label: 'Issue Challan', icon: SIDEBAR_ICONS.issueChallan, href: 'issue-challan.html' },
             { key: 'challanHistory', label: 'Challan History', icon: SIDEBAR_ICONS.challanHistory, href: 'challan-history.html' },
             { key: 'todayDuty', label: 'Today Duty', icon: SIDEBAR_ICONS.todayDuty, href: 'police-dashboard.html' }
         ],

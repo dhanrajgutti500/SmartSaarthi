@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartSarthi — Secure Login</title>
+    <title>Smart Saarthi — Secure Login</title>
     <meta name="description" content="Bharat RTO Portal - Secure Access for Police, PUC Centers & Insurance Agencies">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -404,7 +404,7 @@
                 </div>
                 <div class="brand-text">
                     
-                    <span class="brand-project">SmartSarthi</span>
+                    <span class="brand-project">Smart Saarthi</span>
                     <span class="brand-ministry">Ministry of Road Transport &amp; Highways</span>
                     
                 </div>
@@ -461,7 +461,7 @@
                 <button type="button" class="role-quick-btn rq-puc" data-quick-role="PUC_CENTER" data-i18n="pucCenter">PUC</button>
                 <button type="button" class="role-quick-btn rq-insurance" data-quick-role="INSURANCE_AGENCY" data-i18n="insurance">Insurance</button>
                 <button type="button" class="role-quick-btn rq-citizen" data-quick-role="CITIZEN">Citizen</button>
-                <div class="role-quick-hint">Click a role above to autofill login credentials <strong>(Citizen: Copy vehicle and mobile from demo-data.html table)</strong></div>
+                <div class="role-quick-hint">Click a role above to autofill login credentials <strong>(Citizen: Vehicle No + last 4 digits of Chassis No)</strong></div>
             </div>
             <div class="simple-card-header">
                 <h2 data-i18n="loginCardTitle">Sign in</h2>
@@ -488,15 +488,15 @@
                         </div>
                     </div>
                     
-                    <!-- Citizen login fields (vehicle number/mobile) -->
+                    <!-- Citizen login fields (vehicle number + last 4 of chassis) -->
                     <div id="citizenLoginFields" style="display: none;">
                         <div class="simple-form-row">
                             <label for="vehicleNumber">Vehicle No:</label>
-                            <input id="vehicleNumber" name="vehicleNumber" type="text" placeholder="MH-02-AB-1234 or MH02AB1234" autocomplete="off">
+                            <input id="vehicleNumber" name="citVehNo" type="text" placeholder="MH-02-AB-1234 or MH02AB1234" autocomplete="new-password" data-lpignore="true">
                         </div>
                         <div class="simple-form-row">
-                            <label for="mobileNumber">Mobile No:</label>
-                            <input id="mobileNumber" name="mobileNumber" type="text" placeholder="9876543240 or +91-9876543240" autocomplete="tel">
+                            <label for="chassisLast4">Chassis No (Last 4):</label>
+                            <input id="chassisLast4" name="citChassis" type="text" placeholder="Last 4 digits of Chassis Number" autocomplete="new-password" data-lpignore="true" maxlength="10">
                         </div>
                     </div>
                     <div class="simple-captcha-row">
@@ -607,12 +607,12 @@
                 puc_delhi_01:   { role: 'PUC_CENTER',      fullName: 'Vikram Singh',       email: 'vikram@delhipuc.in',             centerName: 'Delhi Emission Testing Lab',      licenseNumber: 'PUC-DL-005678', phone: '+91-98765-43221' },
                 insurance_lic_01: { role: 'INSURANCE_AGENCY', fullName: 'Priya Nair',       email: 'priya.nair@licindia.com',        agencyName: 'Life Insurance Corporation of India', licenseNumber: 'IRDA-LIC-1001', phone: '+91-98765-43230' },
                 insurance_hdfc_01: { role: 'INSURANCE_AGENCY', fullName: 'Karan Mehta',     email: 'karan.mehta@hdfcergo.com',       agencyName: 'HDFC ERGO General Insurance',     licenseNumber: 'IRDA-HDFC-2056', phone: '+91-98765-43231' },
-                citizen_MH02AB1234: { role: 'CITIZEN',      fullName: 'Anjali Verma',       email: 'anjali.verma@gmail.com',         phone: '9876543240', vehicleNumber: 'MH-02-AB-1234' },
-                citizen_MH02CD5678: { role: 'CITIZEN',      fullName: 'Rahul Sharma',       email: 'rahul.sharma@gmail.com',         phone: '9876543241', vehicleNumber: 'MH-02-CD-5678' },
-                citizen_DL03EF9012: { role: 'CITIZEN',      fullName: 'Priya Singh',        email: 'priya.singh@gmail.com',          phone: '9876543242', vehicleNumber: 'DL-03-EF-9012' },
-                citizen_MH02GH3456: { role: 'CITIZEN',      fullName: 'Amit Kumar',         email: 'amit.kumar@gmail.com',           phone: '9876543243', vehicleNumber: 'MH-02-GH-3456' },
-                citizen_KA04JK7890: { role: 'CITIZEN',      fullName: 'Sneha Patel',        email: 'sneha.patel@gmail.com',          phone: '9876543244', vehicleNumber: 'KA-04-JK-7890' },
-                citizen_TN05LM8901: { role: 'CITIZEN',      fullName: 'Sanjay Reddy',       email: 'sanjay.reddy@gmail.com',         phone: '9876543245', vehicleNumber: 'TN-05-LM-8901' }
+                citizen_MH02AB1234: { role: 'CITIZEN',      fullName: 'Anjali Verma',       email: 'anjali.verma@gmail.com',         phone: '+91-9876543240', vehicleNumber: 'MH-02-AB-1234' },
+                citizen_MH02CD5678: { role: 'CITIZEN',      fullName: 'Rahul Sharma',       email: 'rahul.sharma@gmail.com',         phone: '+91-9876543241', vehicleNumber: 'MH-02-CD-5678' },
+                citizen_DL03EF9012: { role: 'CITIZEN',      fullName: 'Priya Singh',        email: 'priya.singh@gmail.com',          phone: '+91-9876543242', vehicleNumber: 'DL-03-EF-9012' },
+                citizen_MH02GH3456: { role: 'CITIZEN',      fullName: 'Amit Kumar',         email: 'amit.kumar@gmail.com',           phone: '+91-9876543243', vehicleNumber: 'MH-02-GH-3456' },
+                citizen_KA04JK7890: { role: 'CITIZEN',      fullName: 'Sneha Patel',        email: 'sneha.patel@gmail.com',          phone: '+91-9876543244', vehicleNumber: 'KA-04-JK-7890' },
+                citizen_TN05LM8901: { role: 'CITIZEN',      fullName: 'Sanjay Reddy',       email: 'sanjay.reddy@gmail.com',         phone: '+91-9876543245', vehicleNumber: 'TN-05-LM-8901' }
             };
 
             const elements = {
@@ -681,15 +681,27 @@
                 });
             }
 
-            function fillCredentials(username, password, role, label, vehicleNumber, mobileNumber) {
+            function fillCredentials(username, password, role, label, vehicleNumber) {
                 if (role === 'CITIZEN') {
                     // Show citizen fields, hide standard fields
                     document.getElementById('citizenLoginFields').style.display = 'block';
                     document.getElementById('standardLoginFields').style.display = 'none';
                     document.getElementById('forgotLink').style.display = 'none';
                     
-                    if (vehicleNumber) document.getElementById('vehicleNumber').value = vehicleNumber;
-                    if (mobileNumber) document.getElementById('mobileNumber').value = mobileNumber;
+                    if (vehicleNumber) {
+                        document.getElementById('vehicleNumber').value = vehicleNumber;
+                        // Auto-fill last 4 digits of chassis number from VehicleData
+                        const chassisLast4 = lookupChassisLast4(vehicleNumber);
+                        if (chassisLast4) {
+                            document.getElementById('chassisLast4').value = chassisLast4;
+                        }
+                        // Re-apply values after a short delay to defeat browser autofill
+                        setTimeout(() => {
+                            document.getElementById('vehicleNumber').value = vehicleNumber;
+                            const cl4 = lookupChassisLast4(vehicleNumber);
+                            if (cl4) document.getElementById('chassisLast4').value = cl4;
+                        }, 150);
+                    }
                 } else {
                     // Show standard fields, hide citizen fields
                     document.getElementById('citizenLoginFields').style.display = 'none';
@@ -708,22 +720,36 @@
                 showAlert(label + ' credentials filled. Enter the captcha shown and click LOGIN.', 'success');
             }
 
+            function lookupChassisLast4(vehicleNumber) {
+                const normalized = (vehicleNumber || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                if (!normalized || !window.VehicleData || !VehicleData.VEHICLES) return '';
+                for (let i = 0; i < VehicleData.VEHICLES.length; i++) {
+                    const v = VehicleData.VEHICLES[i];
+                    const vnNorm = (v.reg || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                    if (vnNorm === normalized) {
+                        const chassis = (v.chassisNo || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                        return chassis.slice(-4);
+                    }
+                }
+                return '';
+            }
+
             function setupRoleQuickButtons() {
                 const ROLE_PRESETS = {
                     POLICE:           { username: 'police_admin',      password: 'pass1234', role: 'POLICE',           label: 'Police Department' },
                     PUC_CENTER:       { username: 'puc_mumbai_01',     password: 'pass1234', role: 'PUC_CENTER',       label: 'PUC Testing Center' },
                     INSURANCE_AGENCY: { username: 'insurance_lic_01',  password: 'pass1234', role: 'INSURANCE_AGENCY', label: 'Insurance Agency' },
-                    CITIZEN:          { vehicleNumber: 'MH-02-AB-1234', mobileNumber: '+91-98765-43240', role: 'CITIZEN', label: 'Citizen Portal' }
+                    CITIZEN:          { vehicleNumber: 'MH-02-AB-1234', role: 'CITIZEN', label: 'Citizen Portal' }
                 };
                 
                 let citizenClickCount = 0;
                 const citizenOptions = [
-                    { vehicleNumber: 'MH-02-AB-1234', mobileNumber: '9876543240', role: 'CITIZEN', label: 'Citizen Portal (MH-02-AB-1234)' },
-                    { vehicleNumber: 'MH-02-CD-5678', mobileNumber: '9876543241', role: 'CITIZEN', label: 'Citizen Portal (MH-02-CD-5678)' },
-                    { vehicleNumber: 'DL-03-EF-9012', mobileNumber: '9876543242', role: 'CITIZEN', label: 'Citizen Portal (DL-03-EF-9012)' },
-                    { vehicleNumber: 'MH-02-GH-3456', mobileNumber: '9876543243', role: 'CITIZEN', label: 'Citizen Portal (MH-02-GH-3456)' },
-                    { vehicleNumber: 'KA-04-JK-7890', mobileNumber: '9876543244', role: 'CITIZEN', label: 'Citizen Portal (KA-04-JK-7890)' },
-                    { vehicleNumber: 'TN-05-LM-8901', mobileNumber: '9876543245', role: 'CITIZEN', label: 'Citizen Portal (TN-05-LM-8901)' }
+                    { vehicleNumber: 'MH-02-AB-1234', role: 'CITIZEN', label: 'Citizen Portal (MH-02-AB-1234) - Pending Challan Demo' },
+                    { vehicleNumber: 'MH-02-CD-5678', role: 'CITIZEN', label: 'Citizen Portal (MH-02-CD-5678) - Pending Challan Demo' },
+                    { vehicleNumber: 'DL-03-EF-9012', role: 'CITIZEN', label: 'Citizen Portal (DL-03-EF-9012) - Pending Challan Demo' },
+                    { vehicleNumber: 'MH-02-GH-3456', role: 'CITIZEN', label: 'Citizen Portal (MH-02-GH-3456) - Pending Challan Demo' },
+                    { vehicleNumber: 'KA-04-JK-7890', role: 'CITIZEN', label: 'Citizen Portal (KA-04-JK-7890) - Pending Challan Demo' },
+                    { vehicleNumber: 'TN-05-LM-8901', role: 'CITIZEN', label: 'Citizen Portal (TN-05-LM-8901) - Pending Challan Demo' }
                 ];
                 document.querySelectorAll('.role-quick-btn[data-quick-role]').forEach(btn => {
                     btn.addEventListener('click', function() {
@@ -739,7 +765,7 @@
                         if (!preset) return;
                         document.querySelectorAll('.role-quick-btn').forEach(b => b.classList.remove('active'));
                         this.classList.add('active');
-                        fillCredentials(preset.username, preset.password, preset.role, preset.label, preset.vehicleNumber, preset.mobileNumber);
+                        fillCredentials(preset.username, preset.password, preset.role, preset.label, preset.vehicleNumber);
                     });
                 });
             }
@@ -764,14 +790,14 @@
 
                     if (isCitizen) {
                         const vehicleNumber = document.getElementById('vehicleNumber').value.trim();
-                        const mobileNumber = document.getElementById('mobileNumber').value.trim();
+                        const chassisLast4 = document.getElementById('chassisLast4').value.trim();
                         
                         if (!vehicleNumber) { showAlert('Please enter your vehicle number (Format: MH02AB1234 or MH-02-AB-1234).', 'error'); shakeForm(); return; }
-                        if (!mobileNumber) { showAlert('Please enter your mobile number (Format: 9876543240).', 'error'); shakeForm(); return; }
+                        if (!chassisLast4) { showAlert('Please enter the last 4 digits of your chassis number.', 'error'); shakeForm(); return; }
 
                         setLoading(true);
                         try {
-                            const response = await attemptCitizenLogin(vehicleNumber, mobileNumber, state.selectedRole);
+                            const response = await attemptCitizenLogin(vehicleNumber, chassisLast4, state.selectedRole);
                             if (response.success) {
                                 showAlert('Login successful! Redirecting to dashboard...', 'success');
                                 saveAuthData(response.data);
@@ -881,12 +907,12 @@
                 }
             }
 
-            async function attemptCitizenLogin(vehicleNumber, mobileNumber, role) {
-                const payload = { vehicleNumber, mobileNumber, role };
+            async function attemptCitizenLogin(vehicleNumber, chassisLast4, role) {
+                const payload = { vehicleNumber, chassisLast4, role };
 
                 const runFallback = () => {
                     try {
-                        const fallbackResult = simulateCitizenLogin(vehicleNumber, mobileNumber, role);
+                        const fallbackResult = simulateCitizenLogin(vehicleNumber, chassisLast4, role);
                         if (fallbackResult && fallbackResult.success) {
                             fallbackResult.message = (fallbackResult.message || '') + '  ·  Backend offline → using Demo Mode';
                         }
@@ -921,114 +947,86 @@
                             data: responseData ? responseData.data : undefined
                         };
                     }
-                    if (responseData && typeof responseData === 'object') {
-                        if (responseData.success === false && responseData.message) {
-                            if (vehicleNumber && mobileNumber) return runFallback();
-                            return responseData;
-                        }
+                    // Backend returned an error response — trust it (it now supports citizen login)
+                    if (responseData && typeof responseData === 'object' && responseData.success === false && responseData.message) {
+                        return responseData;
                     }
-                    if (vehicleNumber && mobileNumber) return runFallback();
                     return { success: false, message: responseData ? (responseData.message || 'Login failed') : 'Login failed' };
                 } catch (networkError) {
                     if (timeoutId) clearTimeout(timeoutId);
-                    if (vehicleNumber && mobileNumber) return runFallback();
+                    // Backend unreachable — fall back to frontend demo data
+                    if (vehicleNumber && chassisLast4) return runFallback();
                     if (timedOut) return { success: false, message: 'Server timed out. Try demo credentials (Citizen).' };
                     return { success: false, message: 'Cannot reach the authentication server.' };
                 }
             }
 
-            function simulateCitizenLogin(vehicleNumber, mobileNumber, role) {
+            function simulateCitizenLogin(vehicleNumber, chassisLast4, role) {
                 // Normalize vehicle number (remove all non-alphanumeric characters and convert to uppercase)
                 const normalizedVehicle = vehicleNumber.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                
-                // Normalize mobile number (remove all non-digit characters)
-                const normalizedMobile = mobileNumber.replace(/\D/g, '');
-                
-                // First try demo accounts for backward compatibility
-                const accountKey = 'citizen_' + normalizedVehicle;
-                const account = demoAccounts[accountKey];
-                
-                if (account) {
-                    // Check if mobile number matches (normalize account phone for comparison)
-                    const accountMobile = account.phone ? account.phone.replace(/\D/g, '') : '';
-                    // Allow matching last 10 digits for flexibility
-                    const mobileMatch = accountMobile && normalizedMobile && 
-                        (accountMobile === normalizedMobile || 
-                         accountMobile.slice(-10) === normalizedMobile.slice(-10) ||
-                         normalizedMobile.slice(-10) === accountMobile.slice(-10));
-                    
-                    if (accountMobile && normalizedMobile && !mobileMatch) {
-                        return { success: false, message: 'Mobile number does not match our records for this vehicle.' };
-                    }
-                    
-                    if (role && account.role !== role) {
-                        return { success: false, message: `Role mismatch. This account belongs to ${account.role.replace('_', ' ')}` };
-                    }
-                    
-                    if (!state.selectedRole && account.role) state.selectedRole = account.role;
-                    const fakeToken = 'demo_token_' + btoa(JSON.stringify({ u: normalizedVehicle, r: account.role, t: Date.now() }));
-                    return {
-                        success: true,
-                        message: 'Login successful (Demo Mode)',
-                        data: {
-                            token: fakeToken, tokenType: 'Bearer', expiresIn: 86400,
-                            userId: Math.floor(Math.random() * 1000) + 1,
-                            username: normalizedVehicle, fullName: account.fullName, email: account.email,
-                            phone: account.phone, role: account.role,
-                            vehicleNumber: normalizedVehicle,
-                            department: account.department || null,
-                            centerName: account.centerName || null,
-                            agencyName: account.agencyName || null,
-                            licenseNumber: account.licenseNumber || null,
-                            loginTime: new Date().toISOString()
-                        }
-                    };
+
+                // Normalize chassis input (keep alphanumeric only, uppercase)
+                const normalizedChassis = (chassisLast4 || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+
+                if (!normalizedChassis || normalizedChassis.length < 4) {
+                    return { success: false, message: 'Please enter the last 4 digits of your chassis number.' };
                 }
-                
-                // If not in demo accounts, check vehicle database
+                const inputLast4 = normalizedChassis.slice(-4);
+
+                // Look up the vehicle in the database to get its chassis number
+                let matchedVehicle = null;
                 if (window.VehicleData && VehicleData.VEHICLES) {
                     for (let i = 0; i < VehicleData.VEHICLES.length; i++) {
                         const v = VehicleData.VEHICLES[i];
                         const vnNorm = (v.reg || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                        
                         if (vnNorm === normalizedVehicle) {
-                            // Found vehicle, check mobile number
-                            const vehicleMobile = v.ownerPhone ? v.ownerPhone.replace(/\D/g, '') : '';
-                            
-                            // Allow matching last 10 digits for flexibility
-                            const mobileMatch = vehicleMobile && normalizedMobile && 
-                                (vehicleMobile === normalizedMobile || 
-                                 vehicleMobile.slice(-10) === normalizedMobile.slice(-10) ||
-                                 normalizedMobile.slice(-10) === vehicleMobile.slice(-10));
-                            
-                            if (vehicleMobile && normalizedMobile && !mobileMatch) {
-                                return { success: false, message: 'Mobile number does not match our records for this vehicle.' };
-                            }
-                            
-                            // Vehicle and mobile matched - create citizen account
-                            const fakeToken = 'demo_token_' + btoa(JSON.stringify({ u: normalizedVehicle, r: 'CITIZEN', t: Date.now() }));
-                            return {
-                                success: true,
-                                message: 'Login successful (Demo Mode)',
-                                data: {
-                                    token: fakeToken, tokenType: 'Bearer', expiresIn: 86400,
-                                    userId: Math.floor(Math.random() * 1000) + 1,
-                                    username: normalizedVehicle, fullName: v.ownerName, email: v.ownerName.replace(/\s+/g, '.').toLowerCase() + '@gmail.com',
-                                    phone: v.ownerPhone, role: 'CITIZEN',
-                                    vehicleNumber: normalizedVehicle,
-                                    department: null,
-                                    centerName: null,
-                                    agencyName: null,
-                                    licenseNumber: null,
-                                    loginTime: new Date().toISOString()
-                                }
-                            };
+                            matchedVehicle = v;
+                            break;
                         }
                     }
                 }
-                
-                // Vehicle not found - show helpful message
-                return { success: false, message: 'Vehicle not found in database. Please check demo-data.html for available vehicles.' };
+
+                if (!matchedVehicle) {
+                    return { success: false, message: 'Vehicle not found in database. Please check your vehicle number.' };
+                }
+
+                // Compare last 4 digits of the chassis number
+                const vehicleChassis = (matchedVehicle.chassisNo || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+                const vehicleLast4 = vehicleChassis.slice(-4);
+
+                if (!vehicleLast4 || vehicleLast4 !== inputLast4) {
+                    return { success: false, message: 'Chassis number does not match our records for this vehicle.' };
+                }
+
+                // Vehicle and chassis matched — get owner details (demo accounts first for richer info)
+                const accountKey = 'citizen_' + normalizedVehicle;
+                const account = demoAccounts[accountKey];
+                const ownerName = account ? account.fullName : matchedVehicle.ownerName;
+                const ownerEmail = account ? account.email : ((matchedVehicle.ownerName || '').replace(/\s+/g, '.').toLowerCase() + '@gmail.com');
+                const ownerPhone = account ? account.phone : matchedVehicle.ownerPhone;
+
+                if (role && role !== 'CITIZEN') {
+                    return { success: false, message: 'Role mismatch. This is a Citizen account.' };
+                }
+                if (!state.selectedRole) state.selectedRole = 'CITIZEN';
+
+                const fakeToken = 'demo_token_' + btoa(JSON.stringify({ u: normalizedVehicle, r: 'CITIZEN', t: Date.now() }));
+                return {
+                    success: true,
+                    message: 'Login successful (Demo Mode)',
+                    data: {
+                        token: fakeToken, tokenType: 'Bearer', expiresIn: 86400,
+                        userId: Math.floor(Math.random() * 1000) + 1,
+                        username: normalizedVehicle, fullName: ownerName, email: ownerEmail,
+                        phone: ownerPhone, role: 'CITIZEN',
+                        vehicleNumber: normalizedVehicle,
+                        department: null,
+                        centerName: null,
+                        agencyName: null,
+                        licenseNumber: null,
+                        loginTime: new Date().toISOString()
+                    }
+                };
             }
 
             function simulateLogin(username, password, role) {

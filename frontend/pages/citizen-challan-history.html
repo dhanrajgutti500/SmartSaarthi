@@ -6,949 +6,189 @@
     <title>Challan History - Citizen Dashboard</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* ====================================================
-           CITIZEN CHALLAN HISTORY — FULL RED THEME
-           ==================================================== */
-        :root {
-            --cz-deep:      #7F1D1D;
-            --cz-primary:   #B91C1C;
-            --cz-main:      #DC2626;
-            --cz-bright:    #EF4444;
-            --cz-soft:      #F87171;
-            --cz-pale:      #FECACA;
-            --cz-ghost:     #FEE2E2;
-            --cz-tint:      #FFF1F1;
-            --cz-surface:   #FFF5F5;
-        }
-        html, body { background: var(--cz-tint) !important; }
-
-        .citizen-layout {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background: var(--cz-tint);
-        }
-        .top-navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; }
-        .layout-body { display: flex; flex: 1; margin-top: 70px; }
-
-        /* ===== Top Navbar — Deep Red ===== */
-        .citizen-layout > .top-navbar {
-            background: linear-gradient(135deg, var(--cz-deep) 0%, var(--cz-primary) 55%, var(--cz-main) 100%) !important;
-            box-shadow: 0 3px 14px rgba(127, 29, 29, 0.35), inset 0 -4px 0 0 var(--cz-bright);
-            border-bottom: none !important;
-        }
-        .citizen-layout > .top-navbar .navbar-content { height: 70px; }
-        .citizen-layout > .top-navbar .navbar-brand { color: #FFFFFF !important; text-shadow: 0 1px 0 rgba(127,29,29,0.6); }
-        .citizen-layout > .top-navbar .navbar-brand svg { color: var(--cz-soft) !important; filter: drop-shadow(0 1px 0 rgba(127,29,29,0.6)); }
-        .citizen-layout > .top-navbar .brand-text { font-family: 'Playfair Display', Georgia, serif; font-weight: 800; font-size: 20px; letter-spacing: -0.2px; }
-        .citizen-layout > .top-navbar .nav-item {
-            color: var(--cz-ghost) !important;
-            font-weight: 600;
-            font-size: 14px;
-            padding: 6px 14px;
-            border-radius: 6px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(254, 202, 202, 0.35);
-        }
-        .citizen-layout > .top-navbar .logout-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.08) !important;
-            border: 1px solid rgba(254, 202, 202, 0.55) !important;
-            border-radius: 6px;
-            color: #FFFFFF !important;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .citizen-layout > .top-navbar .logout-btn:hover {
-            background: #FFFFFF !important;
-            color: var(--cz-primary) !important;
-            border-color: #FFFFFF !important;
-            transform: translateY(-1px);
-        }
-        .navbar-menu { display: flex; align-items: center; gap: 16px; }
-
-        /* ===== Sidebar — Deep Red Night ===== */
-        .citizen-sidebar {
-            background: linear-gradient(180deg, #7F1D1D 0%, #991B1B 55%, #B91C1C 100%) !important;
-            padding: 20px 0 12px;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 70px; left: 0; bottom: 0;
-            width: 240px;
-            overflow-y: auto;
-            z-index: 900;
-            border-right: 1px solid rgba(254, 202, 202, 0.25);
-        }
-        @media (max-width: 1024px) { .citizen-sidebar { display: none; } }
-        .citizen-main {
-            background: linear-gradient(180deg, var(--cz-tint) 0%, var(--cz-surface) 100%) !important;
-            padding: 0;
-            overflow-y: auto;
-            flex: 1;
-            margin-left: 240px;
-        }
-        @media (max-width: 1024px) { .citizen-main { margin-left: 0; } }
-        .sidebar-header { padding: 0 20px 20px; border-bottom: 1px solid rgba(254, 202, 202, 0.35) !important; margin-bottom: 6px; }
-        .sidebar-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; color: #FFFFFF !important; margin-bottom: 4px; letter-spacing: 0.3px; }
-        .sidebar-subtitle { font-size: 12px; color: var(--cz-ghost) !important; letter-spacing: 0.4px; }
-        .sidebar-menu { flex: 1; padding: 14px 0 20px; overflow-y: auto; }
-        .menu-section { padding: 16px 20px 6px; font-size: 11px; font-weight: 800; color: var(--cz-pale) !important; text-transform: uppercase; letter-spacing: 1.2px; }
-        .menu-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 12px 20px;
-            color: var(--cz-ghost) !important;
-            text-decoration: none;
-            transition: all 0.18s ease;
-            border-left: 3px solid transparent;
-            margin: 2px 6px;
-            border-radius: 0 8px 8px 0;
-        }
-        .menu-item svg { width: 18px; height: 18px; stroke-width: 2; fill: none; stroke: currentColor; }
-        .menu-item span { font-size: 14px; font-weight: 500; }
-        .menu-item:hover { background: rgba(255,255,255,0.10) !important; color: #FFFFFF !important; border-left-color: var(--cz-soft) !important; }
-        .menu-item.active {
-            background: linear-gradient(90deg, #FFFFFF 0%, rgba(255,255,255,0.96) 100%) !important;
-            color: var(--cz-primary) !important;
-            border-left-color: var(--cz-bright) !important;
-            font-weight: 700 !important;
-            box-shadow: 2px 2px 8px rgba(127, 29, 29, 0.25);
-        }
-        .menu-item.active svg { color: var(--cz-main) !important; filter: drop-shadow(0 1px 0 rgba(220,38,38,0.2)); }
-
-        .content-wrapper { padding: 24px; }
-        .top-navbar { display: block !important; }
-
-        /* ===== Page title / subtitle ===== */
-        .page-title { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--cz-deep) !important; margin-bottom: 6px; }
-        .page-subtitle { color: var(--cz-primary) !important; font-size: 14px; margin-bottom: 20px; opacity: 0.9; }
-
-        /* ===== History summary stat cards — red family ===== */
-        .hist-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 20px; }
-        @media (max-width: 1024px) { .hist-summary-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px)  { .hist-summary-grid { grid-template-columns: 1fr; } }
-        .hist-stat-card {
-            background: #FFFFFF;
-            border-radius: 14px;
-            padding: 22px;
-            box-shadow: 0 1px 3px rgba(127,29,29,.06), 0 8px 24px -14px rgba(127,29,29,.22);
-            border: 1px solid var(--cz-pale) !important;
-            position: relative;
-        }
-        .hist-stat-card.sc-blue,
-        .hist-stat-card.sc-green,
-        .hist-stat-card.sc-amber,
-        .hist-stat-card.sc-purple { border-left: 5px solid var(--cz-main) !important; }
-        .hist-stat-card.sc-blue   { background: linear-gradient(180deg, #FFFFFF, #FFF5F5); }
-        .hist-stat-card.sc-green  { background: linear-gradient(180deg, #FFFFFF, #FFF1F1); }
-        .hist-stat-card.sc-amber  { background: linear-gradient(180deg, #FFFFFF, #FFF5F5); }
-        .hist-stat-card.sc-purple { background: linear-gradient(180deg, #FFFFFF, #FFF1F1); }
-        .hist-stat-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
-        .sc-blue   .hist-stat-icon,
-        .sc-green  .hist-stat-icon,
-        .sc-amber  .hist-stat-icon,
-        .sc-purple .hist-stat-icon { background: rgba(220, 38, 38, 0.12) !important; color: var(--cz-main) !important; }
-        .hist-stat-icon svg { width: 22px; height: 22px; stroke-width: 2; fill: none; stroke: currentColor; }
-        .hist-stat-value { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 800; color: var(--cz-deep) !important; line-height: 1.1; margin-bottom: 6px; }
-        .hist-stat-label { font-size: 13px; font-weight: 600; color: var(--cz-primary) !important; margin-bottom: 4px; letter-spacing: 0.4px; }
-        .hist-stat-sub { font-size: 11.5px; color: #991B1B !important; font-weight: 500; opacity: 0.85; }
-
-        /* ===== Filter panel ===== */
-        .filter-panel {
-            background: #FFFFFF;
-            border-radius: 12px;
-            padding: 18px 20px;
-            box-shadow: 0 1px 3px rgba(127,29,29,.06);
-            border: 1px solid var(--cz-pale) !important;
-            border-top: 3px solid var(--cz-main) !important;
-            margin-bottom: 20px;
-        }
-        .filter-bar { display: grid; grid-template-columns: repeat(4, 1fr) auto auto; gap: 14px; align-items: end; }
-        @media (max-width: 1024px) { .filter-bar { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 640px)  { .filter-bar { grid-template-columns: 1fr; } }
-        .filter-group { display: flex; flex-direction: column; gap: 6px; }
-        .filter-group label { font-size: 12px; font-weight: 700; color: var(--cz-deep) !important; letter-spacing: 0.3px; }
-        .filter-group input,
-        .filter-group select {
-            height: 42px;
-            padding: 0 12px;
-            border: 1.5px solid var(--cz-pale) !important;
-            border-radius: 8px;
-            font-size: 13px;
-            color: var(--cz-deep) !important;
-            background: #FFFFFF;
-            transition: all 0.2s;
-            outline: none;
-            font-family: inherit;
-        }
-        .filter-group input:focus,
-        .filter-group select:focus {
-            border-color: var(--cz-main) !important;
-            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
-        }
-
-        /* ===== Buttons ===== */
-        .btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-            min-height: 42px; padding: 0 18px;
-            border-radius: 8px;
-            font-size: 13px; font-weight: 700;
-            transition: all 0.2s; cursor: pointer; border: none; font-family: inherit;
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, var(--cz-primary) 0%, var(--cz-main) 100%) !important;
-            color: #FFFFFF;
-        }
-        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(191, 25, 25, .28); }
-        .btn-outline {
-            background: #FFFFFF;
-            border: 1.5px solid var(--cz-pale) !important;
-            color: var(--cz-primary) !important;
-            font-weight: 600;
-        }
-        .btn-outline:hover { background: var(--cz-tint) !important; border-color: var(--cz-main) !important; color: var(--cz-deep) !important; }
-        .btn-sm { min-height: 32px; padding: 0 12px; font-size: 12px; border-radius: 6px; }
-        .btn svg { width: 15px; height: 15px; stroke-width: 2; fill: none; stroke: currentColor; }
-
-        /* ===== History panel + data table ===== */
-        .history-panel {
-            background: #FFFFFF;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(127,29,29,.06);
-            border: 1px solid var(--cz-pale) !important;
-            border-top: 3px solid var(--cz-main) !important;
-            overflow: hidden;
-        }
-        .history-panel-head {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--cz-pale) !important;
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
-        }
-        .history-panel-head h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--cz-deep) !important; font-weight: 700; }
-        .info-chip {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
-        }
-        .info-chip.success { background: rgba(220,38,38,.10) !important; color: var(--cz-primary) !important; border: 1px solid rgba(220, 38, 38, 0.3) !important; }
-        .info-chip.warning { background: #FFF7ED !important; color: #C2410C !important; border: 1px solid #FDBA74 !important; }
-        .info-chip.primary { background: var(--cz-ghost) !important; color: var(--cz-primary) !important; border: 1px solid var(--cz-pale) !important; }
-
-        /* ===== Row action buttons (citizen-red palette) ===== */
-        .row-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-        .action-btn {
-            display: inline-flex; align-items: center; justify-content: center; gap: 5px;
-            min-height: 30px; padding: 0 10px; border-radius: 6px;
-            font-size: 11.5px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: all 0.2s;
-        }
-        .action-btn svg { width: 13px; height: 13px; stroke-width: 2; fill: none; stroke: currentColor; }
-        .action-btn.view    { background: var(--cz-ghost) !important; color: var(--cz-primary) !important; border: 1px solid var(--cz-pale) !important; }
-        .action-btn.view:hover { background: var(--cz-pale) !important; }
-        .action-btn.pay     { background: linear-gradient(135deg, var(--cz-primary), var(--cz-main)) !important; color: #FFFFFF !important; box-shadow: 0 2px 6px rgba(220,38,38,0.35); }
-        .action-btn.pay:hover { background: var(--cz-deep) !important; }
-        .action-btn.receipt { background: #FFF7ED !important; color: #92400E !important; border: 1px solid #FDE68A !important; }
-        .action-btn.receipt:hover { background: #FDE68A !important; }
-
-        /* ===== Pagination ===== */
-        .pagination-wrap { padding: 16px 20px; border-top: 1px solid var(--cz-pale) !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .pagination-info { font-size: 13px; color: var(--cz-primary) !important; font-weight: 500; opacity: 0.9; }
-        .pagination-info strong { color: var(--cz-deep) !important; }
-        .pagination-controls { display: flex; gap: 6px; align-items: center; }
-        .page-btn {
-            min-width: 34px; height: 34px; padding: 0 10px; border-radius: 6px;
-            font-size: 12.5px; font-weight: 600;
-            border: 1px solid var(--cz-pale) !important;
-            background: #FFFFFF; color: var(--cz-primary) !important;
-            cursor: pointer; transition: all 0.2s; font-family: inherit;
-        }
-        .page-btn:hover:not(:disabled) { border-color: var(--cz-main) !important; color: var(--cz-deep) !important; background: var(--cz-tint) !important; }
-        .page-btn.active {
-            background: linear-gradient(135deg, var(--cz-primary), var(--cz-main)) !important;
-            color: #FFFFFF !important;
-            border-color: transparent !important;
-            box-shadow: 0 3px 8px rgba(220,38,38,0.35);
-        }
-        .page-btn:disabled { opacity: 0.45; cursor: not-allowed; }
-        .table-wrap { overflow-x: auto; }
-
-        /* ===== Table thead red ===== */
-        .citizen-main .data-table thead th {
-            background: linear-gradient(180deg, var(--cz-ghost) 0%, var(--cz-pale) 100%) !important;
-            color: var(--cz-deep) !important;
-            border-bottom: 2px solid var(--cz-main) !important;
-            letter-spacing: 0.6px;
-        }
-        .citizen-main .data-table tr:hover td { background: var(--cz-tint) !important; }
-
-        /* ===== Status badges (citizen red palette) ===== */
-        .status-badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-        .status-badge.paid { background: rgba(22,163,74,.12); color: #16A34A; font-weight: 600; }
-        .status-badge.pending_payment { background: #FFF7ED !important; color: #C2410C !important; border: 1px solid #FDBA74 !important; font-weight: 700 !important; }
-        .status-badge.expired { background: var(--cz-ghost) !important; color: var(--cz-primary) !important; border: 1px solid var(--cz-pale) !important; font-weight: 700 !important; }
-        .status-badge.cancelled { background: rgba(107,114,128,.12); color: #6B7280; font-weight: 600; }
-        .status-badge.disputed { background: var(--cz-ghost) !important; color: var(--cz-primary) !important; border: 1px solid var(--cz-pale) !important; font-weight: 700 !important; }
-
-        /* ===== Empty / Loading states ===== */
-        .empty-state { padding: 56px 24px; text-align: center; }
-        .empty-state .empty-icon {
-            width: 76px; height: 76px; border-radius: 50%;
-            background: var(--cz-tint) !important;
-            margin: 0 auto 18px;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--cz-soft) !important;
-            border: 1px dashed var(--cz-pale) !important;
-        }
-        .empty-state .empty-icon svg { width: 38px; height: 38px; stroke-width: 1.5; fill: none; stroke: currentColor; }
-        .empty-state h4 { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--cz-deep) !important; margin-bottom: 8px; }
-        .empty-state p { color: var(--cz-primary) !important; font-size: 14px; opacity: 0.9; }
-        .loading-cell { text-align: center; padding: 40px 14px !important; color: var(--cz-primary) !important; font-size: 14px; font-weight: 500; }
-        .loading-spinner {
-            display: inline-block; width: 26px; height: 26px;
-            border: 3px solid var(--cz-pale) !important;
-            border-top-color: var(--cz-main) !important;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-right: 10px; vertical-align: middle;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* ===== Footer (red) ===== */
-        .footer-bar {
-            background: linear-gradient(180deg, #FFFFFF 0%, var(--cz-tint) 100%) !important;
-            padding: 12px 20px;
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
-            margin-left: 240px;
-            border-top: 3px solid var(--cz-main) !important;
-            color: var(--cz-deep) !important;
-        }
-        .footer-bar .copyright-text,
-        .footer-bar .version-info { color: var(--cz-primary) !important; }
-        @media (max-width: 1024px) { .footer-bar { margin-left: 0; } }
-
-        /* Inputs focus red ring — final guard */
-        .citizen-main input:focus,
-        .citizen-main select:focus,
-        .citizen-main textarea:focus {
-            outline: none !important;
-            border-color: var(--cz-main) !important;
-            box-shadow: 0 0 0 3px rgba(220,38,38,0.15) !important;
-        }
-    </style>
 </head>
 <body>
-    <div class="citizen-layout">
-        <nav class="top-navbar" style="grid-column: 1 / -1;">
-            <div class="navbar-content">
-                <div class="navbar-brand">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="32" height="32"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17H2"/></svg>
-                    <span class="brand-text">Parivahan Sewa</span>
-                </div>
-                <div class="navbar-menu">
-                    <div class="nav-item">Citizen Portal</div>
-                    <button class="logout-btn" id="logoutBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 20 21 4 21"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
-                        Logout
-                    </button>
-                </div>
-            </div>
-        </nav>
+    <main class="layout">
+        <div id="welcomeBar"></div>
 
-        <div class="layout-body">
-        <aside class="citizen-sidebar">
-            <div class="sidebar-header">
-                <div class="sidebar-title">Citizen Portal</div>
-                <div class="sidebar-subtitle">Parivahan Sewa</div>
-            </div>
-
-            <div class="sidebar-menu">
-                <div class="menu-section">Overview</div>
-                <a href="citizen-dashboard.html" class="menu-item">
-                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                    <span>Dashboard</span>
-                </a>
-
-                <div class="menu-section">My Vehicles</div>
-                <a href="pay-challan.html" class="menu-item">
-                    <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                    <span>Pay Challan</span>
-                </a>
-                <a href="citizen-challan-history.html" class="menu-item active">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                    <span>Challan History</span>
-                </a>
-            </div>
-        </aside>
-
-        <main class="citizen-main">
-            <div class="content-wrapper">
-
-                <h1 class="page-title">Challan History &amp; Credits</h1>
-                <p class="page-subtitle">View all your e-challan records, track payments, and monitor your credits (paid challans).</p>
-
-                <section class="hist-summary-grid">
-                    <div class="hist-stat-card sc-blue">
-                        <div class="hist-stat-icon">
-                            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                        </div>
-                        <div class="hist-stat-value" id="totalChallans">—</div>
-                        <div class="hist-stat-label">Total Challans</div>
-                        <div class="hist-stat-sub">All-time issued challans</div>
-                    </div>
-                    <div class="hist-stat-card sc-green">
-                        <div class="hist-stat-icon">
-                            <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                        </div>
-                        <div class="hist-stat-value" id="paidChallans">—</div>
-                        <div class="hist-stat-label">Paid Challans</div>
-                        <div class="hist-stat-sub" id="paidSub">Settled successfully</div>
-                    </div>
-                    <div class="hist-stat-card sc-amber">
-                        <div class="hist-stat-icon">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                        </div>
-                        <div class="hist-stat-value" id="pendingChallans">—</div>
-                        <div class="hist-stat-label">Pending Challans</div>
-                        <div class="hist-stat-sub" id="pendingSub">Awaiting payment</div>
-                    </div>
-                    <div class="hist-stat-card sc-purple">
-                        <div class="hist-stat-icon">
-                            <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        </div>
-                        <div class="hist-stat-value" id="totalPaidAmount">₹ —</div>
-                        <div class="hist-stat-label">Total Credits (Amount Paid)</div>
-                        <div class="hist-stat-sub" id="creditsSub">Lifetime payment record</div>
-                    </div>
-                </section>
-
-                <div class="filter-panel">
-                    <div class="filter-bar">
-                        <div class="filter-group">
-                            <label>From Date</label>
-                            <input type="date" id="fromDate" />
-                        </div>
-                        <div class="filter-group">
-                            <label>To Date</label>
-                            <input type="date" id="toDate" />
-                        </div>
-                        <div class="filter-group">
-                            <label>Vehicle No.</label>
-                            <select id="vehicleFilter">
-                                <option value="ALL">All Vehicles</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label>Status</label>
-                            <select id="statusFilter">
-                                <option value="ALL">All Status</option>
-                                <option value="PAID">Paid</option>
-                                <option value="PENDING_PAYMENT">Pending Payment</option>
-                                <option value="EXPIRED">Overdue</option>
-                                <option value="CANCELLED">Cancelled</option>
-                                <option value="DISPUTED">Disputed</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary" id="filterBtn">
-                            <svg viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-                            Filter
-                        </button>
-                        <button class="btn btn-outline" id="resetBtn">
-                            <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                            Reset
-                        </button>
+        <section class="stats-grid">
+            <div class="stat-card police">
+                <div class="stat-header">
+                    <div class="stat-icon police">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                     </div>
                 </div>
+                <div class="stat-value" id="totalChallans">0</div>
+                <div class="stat-label">Total Challans</div>
+                <div class="stat-trend">All Time</div>
+            </div>
 
-                <div class="history-panel">
-                    <div class="history-panel-head">
-                        <h3>My Challan Records</h3>
-                        <div class="row-actions">
-                            <span class="info-chip primary" id="totalRecordsChip">0 records</span>
-                            <span class="info-chip success" id="paidChip">Paid: 0</span>
-                            <span class="info-chip warning" id="dueChip">Due: ₹0</span>
-                            <button class="btn btn-outline btn-sm" id="exportBtn">
-                                <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                                Export
-                            </button>
-                        </div>
+            <div class="stat-card warning">
+                <div class="stat-header">
+                    <div class="stat-icon warning">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
                     </div>
+                </div>
+                <div class="stat-value" id="pendingChallans">0</div>
+                <div class="stat-label">Pending</div>
+                <div class="stat-trend">Unpaid</div>
+            </div>
 
-                    <div class="table-wrap">
+            <div class="stat-card success">
+                <div class="stat-header">
+                    <div class="stat-icon success">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value" id="paidChallans">0</div>
+                <div class="stat-label">Paid</div>
+                <div class="stat-trend">Completed</div>
+            </div>
+
+            <div class="stat-card danger">
+                <div class="stat-header">
+                    <div class="stat-icon danger">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                </div>
+                <div class="stat-value" id="totalAmount">₹0</div>
+                <div class="stat-label">Total Paid</div>
+                <div class="stat-trend">Lifetime</div>
+            </div>
+        </section>
+
+        <section class="content-grid">
+            <div class="panel">
+                <div class="panel-header">
+                    <h3 class="panel-title">Challan History</h3>
+                    <div class="panel-actions">
+                        <a href="pay-challan.html" class="btn btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            Pay Pending Challans
+                        </a>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
                         <table class="data-table">
                             <thead>
                                 <tr>
                                     <th>Challan No.</th>
-                                    <th>Date &amp; Time</th>
-                                    <th>Vehicle No.</th>
                                     <th>Violation</th>
+                                    <th>Date</th>
                                     <th>Location</th>
-                                    <th style="text-align:right;">Amount (₹)</th>
+                                    <th>Amount</th>
                                     <th>Status</th>
-                                    <th style="width: 160px;">Actions</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody id="challanTbody">
-                                <tr>
-                                    <td colspan="8" class="loading-cell">
-                                        <span class="loading-spinner"></span>Loading your challan history...
-                                    </td>
-                                </tr>
+                            <tbody id="challanHistoryTbody">
                             </tbody>
                         </table>
                     </div>
-
-                    <div class="pagination-wrap" id="paginationWrap" style="display:none;">
-                        <div class="pagination-info">Showing <span id="showingStart">1</span> to <span id="showingEnd">1</span> of <strong id="showingTotal">0</strong> records</div>
-                        <div class="pagination-controls">
-                            <button class="page-btn" id="prevPageBtn" disabled>Previous</button>
-                            <button class="page-btn active" id="page1Btn">1</button>
-                            <button class="page-btn" id="nextPageBtn">Next</button>
-                        </div>
-                    </div>
                 </div>
-
             </div>
+        </section>
+    </main>
 
-            <footer class="footer-bar">
-                <span class="copyright-text">© 2026 Government of India · Ministry of Road Transport &amp; Highways · All Rights Reserved</span>
-                <span class="version-info">System v2.1.0 · Parivahan Citizen · Live</span>
-            </footer>
-        </main>
-        </div>
-    </div>
-
+    <script src="../js/data.js"></script>
+    <script src="../js/dashboard.js"></script>
     <script>
-    (function() {
-        const API_BASE = 'http://localhost:8081/challan';
-        const STORAGE_KEY = 'vehical_auth_data';
-        const PAGE_SIZE = 8;
-
-        let state = {
-            allChallans: [],
-            filteredChallans: [],
-            currentPage: 1,
-            summary: null,
-            vehicleNo: null
-        };
-
-        const rupiah = new Intl.NumberFormat('en-IN');
-
-        function getAuthData() {
-            try {
-                return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-            } catch { return {}; }
-        }
-
-        function getAuthenticatedVehicleNo() {
-            const auth = getAuthData();
-            if (auth.user) {
-                return auth.user.vehicleNumber || auth.user.username;
-            }
-            return null;
-        }
-
-        function getInitials(name) {
-            if (!name) return '?';
-            const parts = name.trim().split(/\s+/);
-            if (parts.length >= 2) {
-                return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-            }
-            return parts[0].substring(0, 2).toUpperCase();
-        }
-
-        function statusBadgeClass(status) {
-            if (!status) return 'pending_payment';
-            const s = status.toUpperCase();
-            if (s === 'PAID') return 'paid';
-            if (s === 'PENDING_PAYMENT' || s === 'PENDING') return 'pending_payment';
-            if (s === 'EXPIRED') return 'expired';
-            if (s === 'CANCELLED') return 'cancelled';
-            if (s === 'DISPUTED') return 'disputed';
-            return 'pending_payment';
-        }
-
-        function statusDisplay(status) {
-            if (!status) return 'Pending';
-            const s = status.toUpperCase();
-            if (s === 'PAID') return 'Paid';
-            if (s === 'PENDING_PAYMENT') return 'Pending Payment';
-            if (s === 'EXPIRED') return 'Overdue';
-            if (s === 'CANCELLED') return 'Cancelled';
-            if (s === 'DISPUTED') return 'Disputed';
-            return status;
-        }
-
-        function formatDateDMY(dateObj) {
-            if (!dateObj) return '—';
-            const d = new Date(dateObj + 'T00:00:00');
-            return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0') + '/' + d.getFullYear();
-        }
-
-        function renderSummary(data) {
-            state.summary = data;
-            document.getElementById('totalChallans').textContent = data.totalChallans ?? 0;
-            document.getElementById('paidChallans').textContent = data.paidChallans ?? 0;
-            document.getElementById('pendingChallans').textContent = data.pendingChallans ?? 0;
-            document.getElementById('totalPaidAmount').textContent = '₹ ' + rupiah.format(data.totalAmountPaid ?? 0);
-
-            document.getElementById('paidSub').textContent = '₹ ' + rupiah.format(data.totalAmountPaid ?? 0) + ' paid so far';
-            const due = data.totalAmountDue ?? 0;
-            document.getElementById('pendingSub').textContent = due > 0 ? '₹ ' + rupiah.format(due) + ' pending' : 'All settled';
-            document.getElementById('creditsSub').textContent = (data.paidChallans ?? 0) + ' challan(s) cleared';
-
-            document.getElementById('totalRecordsChip').textContent = (data.totalChallans ?? 0) + ' records';
-            document.getElementById('paidChip').textContent = 'Paid: ' + (data.paidChallans ?? 0);
-            document.getElementById('dueChip').textContent = 'Due: ₹' + rupiah.format(due);
-        }
-
-        function populateVehicleFilter(challans) {
-            const sel = document.getElementById('vehicleFilter');
-            const existing = new Set();
-            challans.forEach(c => { if (c.vehicleNo) existing.add(c.vehicleNo); });
-            sel.innerHTML = '<option value="ALL">All Vehicles</option>';
-            existing.forEach(v => {
-                const opt = document.createElement('option');
-                opt.value = v;
-                opt.textContent = v;
-                sel.appendChild(opt);
+        (function() {
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize dashboard with citizen role
+                const auth = DashboardApp.init(['CITIZEN'], 'Citizen Portal', 'history');
+                if (auth) {
+                    loadChallanHistory();
+                }
             });
-            if (state.vehicleNo) {
-                sel.value = state.vehicleNo;
-            }
-        }
 
-        function applyFilters() {
-            const fromDate = document.getElementById('fromDate').value;
-            const toDate = document.getElementById('toDate').value;
-            const vehicle = document.getElementById('vehicleFilter').value;
-            const status = document.getElementById('statusFilter').value;
+            function loadChallanHistory() {
+                const auth = JSON.parse(localStorage.getItem('vehical_auth_data') || '{}');
+                const vehicleNumber = auth.user?.vehicleNumber || auth.user?.username;
 
-            state.filteredChallans = state.allChallans.filter(c => {
-                if (vehicle !== 'ALL' && c.vehicleNo !== vehicle) return false;
-                if (status !== 'ALL' && (!c.status || c.status.toUpperCase() !== status)) return false;
-                if (fromDate && c.challanDate && c.challanDate < fromDate) return false;
-                if (toDate && c.challanDate && c.challanDate > toDate) return false;
-                return true;
-            });
-            state.currentPage = 1;
-            renderTable();
-        }
-
-        function renderTable() {
-            const tbody = document.getElementById('challanTbody');
-            const list = state.filteredChallans;
-            const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
-            if (state.currentPage > totalPages) state.currentPage = totalPages;
-
-            const startIdx = (state.currentPage - 1) * PAGE_SIZE;
-            const endIdx = Math.min(startIdx + PAGE_SIZE, list.length);
-            const pageItems = list.slice(startIdx, endIdx);
-
-            if (list.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="8">
-                            <div class="empty-state">
-                                <div class="empty-icon">
-                                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                </div>
-                                <h4>No Challan Records Found</h4>
-                                <p>No challans match the selected filters. Try adjusting your search criteria.</p>
-                            </div>
-                        </td>
-                    </tr>`;
-                document.getElementById('paginationWrap').style.display = 'none';
-                return;
-            }
-
-            tbody.innerHTML = pageItems.map(c => {
-                const cls = statusBadgeClass(c.status);
-                const sDisplay = statusDisplay(c.status);
-                const isPaid = c.status && c.status.toUpperCase() === 'PAID';
-                const isPending = c.status && (c.status.toUpperCase() === 'PENDING_PAYMENT' || c.status.toUpperCase() === 'EXPIRED');
-                const violText = Array.isArray(c.violations) ? c.violations.join(', ') : (c.violations || '—');
-                const loc = c.location || '—';
-
-                let actionButtons = '';
-                if (isPending) {
-                    actionButtons = `
-                        <button class="action-btn pay" data-pay="${c.challanId}" data-challan-number="${c.challanNumber}">
-                            <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                            Pay Now
-                        </button>
-                        <button class="action-btn view" data-view="${c.challanId}">
-                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        </button>
-                    `;
-                } else if (isPaid) {
-                    actionButtons = `
-                        <button class="action-btn receipt" data-receipt="${c.challanId}">
-                            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
-                            Receipt
-                        </button>
-                        <button class="action-btn view" data-view="${c.challanId}">
-                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                        </button>
-                    `;
-                } else {
-                    actionButtons = `
-                        <button class="action-btn view" data-view="${c.challanId}">
-                            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            View
-                        </button>
-                    `;
+                if (!vehicleNumber) {
+                    document.getElementById('challanHistoryTbody').innerHTML = '<tr><td colspan="7" style="text-align:center; color:#64748B;">No data available</td></tr>';
+                    return;
                 }
 
-                return `
-                    <tr>
-                        <td style="font-weight:700;color:#002B5C;">${c.challanNumber || '—'}</td>
-                        <td>
-                            <div style="font-weight:600;">${formatDateDMY(c.challanDate)}</div>
-                            <div style="font-size:11px;color:#64748B;">${String(c.challanTime || '').substring(0,5) || '—'}</div>
-                        </td>
-                        <td style="font-weight:700;color:#0F172A;">${c.vehicleNo || '—'}</td>
-                        <td><div style="font-size:13px;color:#334155;font-weight:500;max-width:220px;">${violText}</div></td>
-                        <td style="font-size:12.5px;color:#475569;">${loc}</td>
-                        <td style="text-align:right;font-weight:700;color:#0F172A;">${rupiah.format(c.totalFine || c.totalFineAmount || 0)}</td>
-                        <td><span class="status-badge ${cls}">${sDisplay}</span></td>
-                        <td><div class="row-actions">${actionButtons}</div></td>
-                    </tr>
-                `;
-            }).join('');
+                const tbody = document.getElementById('challanHistoryTbody');
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#64748B;">Loading challan history...</td></tr>';
 
-            const pagWrap = document.getElementById('paginationWrap');
-            if (list.length > PAGE_SIZE) {
-                pagWrap.style.display = 'flex';
-                document.getElementById('showingStart').textContent = startIdx + 1;
-                document.getElementById('showingEnd').textContent = endIdx;
-                document.getElementById('showingTotal').textContent = list.length;
-                document.getElementById('prevPageBtn').disabled = state.currentPage === 1;
-                document.getElementById('nextPageBtn').disabled = state.currentPage === totalPages;
-                document.getElementById('page1Btn').textContent = state.currentPage;
-            } else {
-                pagWrap.style.display = 'none';
+                fetch('/api/challan/vehicle?vehicleNo=' + encodeURIComponent(vehicleNumber))
+                    .then(r => r.json())
+                    .then(result => {
+                        const challans = (result && result.success && Array.isArray(result.data)) ? result.data : [];
+
+                        let totalPaid = 0;
+                        let pendingCount = 0;
+                        let paidCount = 0;
+                        let html = '';
+
+                        if (challans.length === 0) {
+                            html = '<tr><td colspan="7" style="text-align:center; color:#64748B;">No challan history found</td></tr>';
+                        } else {
+                            html = challans.map(c => {
+                                const isPaid = (c.paymentStatus || '').toLowerCase() === 'paid' || c.status === 'PAID';
+                                const statusLabel = isPaid ? 'Paid' : 'Pending';
+
+                                if (isPaid) {
+                                    totalPaid += c.totalFineAmount;
+                                    paidCount++;
+                                } else {
+                                    pendingCount++;
+                                }
+
+                                // Format date from YYYY-MM-DD to DD-MM-YYYY
+                                let dateStr = c.challanDate || '';
+                                if (dateStr) {
+                                    const parts = dateStr.split('-');
+                                    if (parts.length === 3) {
+                                        dateStr = parts[2] + '-' + parts[1] + '-' + parts[0];
+                                    }
+                                }
+
+                                return `
+                                    <tr>
+                                        <td><strong>${c.challanNumber}</strong></td>
+                                        <td>${c.violationName || 'Traffic Violation'}</td>
+                                        <td>${dateStr}</td>
+                                        <td>${c.location || 'N/A'}</td>
+                                        <td>₹${c.totalFineAmount}</td>
+                                        <td><span class="status-badge ${statusLabel === 'Paid' ? 'valid' : 'pending'}">${statusLabel}</span></td>
+                                        <td>
+                                            ${!isPaid ? `
+                                                <a href="pay-challan.html?challanNo=${encodeURIComponent(c.challanNumber)}" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">Pay</a>
+                                            ` : `
+                                                <button class="btn btn-outline" style="padding: 6px 12px; font-size: 12px;" onclick="viewReceipt('${c.challanNumber}')">Receipt</button>
+                                            `}
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('');
+                        }
+
+                        tbody.innerHTML = html;
+
+                        // Update stats
+                        document.getElementById('totalChallans').textContent = challans.length;
+                        document.getElementById('pendingChallans').textContent = pendingCount;
+                        document.getElementById('paidChallans').textContent = paidCount;
+                        document.getElementById('totalAmount').textContent = '₹' + totalPaid;
+                    })
+                    .catch(err => {
+                        console.error('Error loading challan history:', err);
+                        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; color:#E11D48;">Failed to load challan history. Please try again.</td></tr>';
+                    });
             }
-            bindRowActions();
-        }
 
-        function bindRowActions() {
-            document.querySelectorAll('[data-pay]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const challanNo = this.getAttribute('data-challan-number');
-                    alert('Redirecting to payment for challan: ' + challanNo);
-                });
-            });
-            document.querySelectorAll('[data-view]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = this.getAttribute('data-view');
-                    alert('Viewing challan details ID: ' + id);
-                });
-            });
-            document.querySelectorAll('[data-receipt]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = this.getAttribute('data-receipt');
-                    window.open(API_BASE + '/' + id + '/pdf', '_blank');
-                });
-            });
-        }
-
-        async function loadChallanHistory() {
-            const vehicleNo = getAuthenticatedVehicleNo();
-            if (!vehicleNo) {
-                renderErrorState('No vehicle linked to your account. Please login again.');
-                return;
-            }
-            state.vehicleNo = vehicleNo;
-
-            try {
-                const response = await fetch(API_BASE + '/citizen/summary/' + encodeURIComponent(vehicleNo));
-                const data = await response.json();
-
-                if (data.success && data.data) {
-                    renderSummary(data.data);
-                    state.allChallans = (data.data.challans || []).slice();
-                    populateVehicleFilter(state.allChallans);
-                    state.filteredChallans = state.allChallans.slice();
-                    renderTable();
-                } else {
-                    throw new Error(data.message || 'Failed to load challan data');
-                }
-            } catch (err) {
-                console.warn('Backend API failed, falling back to mock/local data:', err);
-                loadMockData(vehicleNo);
-            }
-        }
-
-        function loadMockData(vehicleNo) {
-            const mockChallans = [
-                {
-                    challanId: 1,
-                    challanNumber: 'CH-2026-00128',
-                    vehicleNo: vehicleNo,
-                    violations: ['No Valid PUC Certificate'],
-                    totalFine: 1000,
-                    challanDate: '2026-07-15',
-                    challanTime: '09:14:00',
-                    location: 'Andheri Flyover, Western Express Hwy',
-                    status: 'PENDING_PAYMENT',
-                    officerName: 'Rajesh Kumar',
-                    policeStation: 'Mumbai Central Traffic Police Station',
-                    paymentStatus: 'Unpaid'
-                },
-                {
-                    challanId: 4,
-                    challanNumber: 'CH-2026-00121',
-                    vehicleNo: vehicleNo,
-                    violations: ['No Valid PUC Certificate', 'Dangerous / Rash Driving'],
-                    totalFine: 2000,
-                    challanDate: '2026-07-02',
-                    challanTime: '08:22:00',
-                    location: 'Agra-Ghaziabad Highway Plaza',
-                    status: 'PAID',
-                    officerName: 'Vikram Singh',
-                    policeStation: 'Worli Traffic Outpost - Mumbai',
-                    paymentStatus: 'Paid'
-                },
-                {
-                    challanId: 5,
-                    challanNumber: 'CH-2026-00120',
-                    vehicleNo: vehicleNo,
-                    violations: ['Wrong Parking'],
-                    totalFine: 500,
-                    challanDate: '2026-06-28',
-                    challanTime: '17:55:00',
-                    location: 'Bandra Link Road No-Parking Zone',
-                    status: 'PAID',
-                    officerName: 'Priya Nair',
-                    policeStation: 'Andheri Traffic Division - Mumbai',
-                    paymentStatus: 'Paid'
-                },
-                {
-                    challanId: 6,
-                    challanNumber: 'CH-2026-00119',
-                    vehicleNo: vehicleNo,
-                    violations: ['Signal Jump / Red Light'],
-                    totalFine: 1000,
-                    challanDate: '2026-06-15',
-                    challanTime: '14:30:00',
-                    location: 'Bandra-Worli Sea Link Toll Plaza',
-                    status: 'PAID',
-                    officerName: 'Priya Nair',
-                    policeStation: 'Andheri Traffic Division - Mumbai',
-                    paymentStatus: 'Paid'
-                },
-                {
-                    challanId: 7,
-                    challanNumber: 'CH-2026-00118',
-                    vehicleNo: vehicleNo,
-                    violations: ['Over Speeding'],
-                    totalFine: 1000,
-                    challanDate: '2026-06-02',
-                    challanTime: '18:05:00',
-                    location: 'Eastern Express Highway',
-                    status: 'CANCELLED',
-                    officerName: 'Rajesh Kumar',
-                    policeStation: 'Mumbai Central Traffic Police Station',
-                    paymentStatus: 'Cancelled'
-                }
-            ];
-
-            const summary = {
-                vehicleNo: vehicleNo,
-                ownerName: 'Amit Sharma',
-                ownerMobile: '9820011234',
-                ownerEmail: 'amit.sharma@email.com',
-                totalChallans: mockChallans.length,
-                paidChallans: mockChallans.filter(c => c.status === 'PAID').length,
-                pendingChallans: mockChallans.filter(c => c.status === 'PENDING_PAYMENT' || c.status === 'EXPIRED').length,
-                cancelledChallans: mockChallans.filter(c => c.status === 'CANCELLED').length,
-                disputedChallans: 0,
-                totalAmountDue: mockChallans.filter(c => c.status === 'PENDING_PAYMENT' || c.status === 'EXPIRED').reduce((s,c)=>s+(c.totalFine||0),0),
-                totalAmountPaid: mockChallans.filter(c => c.status === 'PAID').reduce((s,c)=>s+(c.totalFine||0),0),
-                totalFineIssued: mockChallans.reduce((s,c)=>s+(c.totalFine||0),0),
-                challans: mockChallans
+            window.viewReceipt = function(challanNo) {
+                const auth = JSON.parse(localStorage.getItem('vehical_auth_data') || '{}');
+                const vehicleNumber = auth.user?.vehicleNumber || auth.user?.username || '';
+                const receiptUrl = `challan-receipt.html?challanNo=${encodeURIComponent(challanNo)}&vehicleNo=${encodeURIComponent(vehicleNumber)}`;
+                window.open(receiptUrl, '_blank');
             };
-
-            renderSummary(summary);
-            state.allChallans = summary.challans.slice();
-            populateVehicleFilter(state.allChallans);
-            state.filteredChallans = state.allChallans.slice();
-            renderTable();
-        }
-
-        function renderErrorState(msg) {
-            document.getElementById('challanTbody').innerHTML = `
-                <tr>
-                    <td colspan="8">
-                        <div class="empty-state">
-                            <div class="empty-icon">
-                                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                            </div>
-                            <h4>Unable to Load</h4>
-                            <p>${msg}</p>
-                        </div>
-                    </td>
-                </tr>
-            `;
-        }
-
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                localStorage.removeItem(STORAGE_KEY);
-                window.location.href = '../login.html';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const auth = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-            if (!auth.user) {
-                window.location.href = '../login.html';
-                return;
-            }
-
-            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-
-            document.getElementById('filterBtn').addEventListener('click', applyFilters);
-            document.getElementById('resetBtn').addEventListener('click', function() {
-                document.getElementById('fromDate').value = '';
-                document.getElementById('toDate').value = '';
-                document.getElementById('vehicleFilter').value = 'ALL';
-                document.getElementById('statusFilter').value = 'ALL';
-                applyFilters();
-            });
-
-            document.getElementById('prevPageBtn').addEventListener('click', function() {
-                if (state.currentPage > 1) { state.currentPage--; renderTable(); }
-            });
-            document.getElementById('nextPageBtn').addEventListener('click', function() {
-                const totalPages = Math.ceil(state.filteredChallans.length / PAGE_SIZE);
-                if (state.currentPage < totalPages) { state.currentPage++; renderTable(); }
-            });
-
-            document.getElementById('exportBtn').addEventListener('click', function() {
-                const rows = state.filteredChallans.map(c => [
-                    c.challanNumber,
-                    formatDateDMY(c.challanDate) + ' ' + String(c.challanTime || '').substring(0,5),
-                    c.vehicleNo,
-                    (c.violations || []).join('; '),
-                    c.location,
-                    c.totalFine || 0,
-                    statusDisplay(c.status)
-                ]);
-                const header = ['Challan No','Date & Time','Vehicle No.','Violation','Location','Amount (INR)','Status'];
-                const csv = [header, ...rows].map(r => r.map(x => `"${String(x ?? '').replace(/"/g,'""')}"`).join(',')).join('\n');
-                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = 'challan-history-' + (state.vehicleNo || 'export') + '.csv';
-                link.click();
-            });
-
-            loadChallanHistory();
-        });
-    })();
+        })();
     </script>
 </body>
 </html>

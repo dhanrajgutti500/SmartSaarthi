@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Saarthi — Police Login</title>
+    <meta name="description" content="Bharat RTO Portal - Police Department Secure Access">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script src="js/i18n.js"></script>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-gradient);
+            position: relative;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            pointer-events: none;
+            background-repeat: no-repeat;
+            background-size: contain;
+            z-index: 0;
+            opacity: .04;
+        }
+        body::before {
+            width: 600px; height: 600px; top: -100px; right: -120px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none"><circle cx="300" cy="300" r="200" stroke="%230F4C81" stroke-width="3"/><circle cx="300" cy="300" r="160" stroke="%230F4C81" stroke-width="2"/><circle cx="300" cy="300" r="120" stroke="%230F4C81" stroke-width="1.5"/><path d="M300 100 L300 140 M300 460 L300 500 M100 300 L140 300 M460 300 L500 300 M229 229 L258 258 M342 342 L371 371 M371 229 L342 258 M258 342 L229 371" stroke="%230F4C81" stroke-width="3"/><path d="M200 400 Q250 380 300 400 T400 400" stroke="%230F4C81" stroke-width="4" fill="none"/><path d="M180 420 Q250 390 320 420 T460 420" stroke="%230F4C81" stroke-width="3" fill="none"/><circle cx="300" cy="300" r="40" stroke="%230F4C81" stroke-width="2.5"/><path d="M300 260 L300 340 M260 300 L340 300" stroke="%230F4C81" stroke-width="2"/></svg>');
+        }
+        body::after {
+            width: 500px; height: 500px; bottom: -80px; left: -100px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none"><path d="M100 350 L150 300 L200 350 L250 280 L300 320 L350 290 L400 340" stroke="%230F4C81" stroke-width="3" fill="none"/><path d="M80 380 L420 380" stroke="%230F4C81" stroke-width="4"/><rect x="140" y="320" width="60" height="40" rx="4" stroke="%230F4C81" stroke-width="2.5"/><rect x="280" y="310" width="70" height="50" rx="4" stroke="%230F4C81" stroke-width="2.5"/><circle cx="170" cy="340" r="8" stroke="%230F4C81" stroke-width="2"/><circle cx="315" cy="335" r="10" stroke="%230F4C81" stroke-width="2"/><path d="M120 250 L180 250 L180 280 L120 280 Z" stroke="%230F4C81" stroke-width="2"/><path d="M150 230 L150 250" stroke="%230F4C81" stroke-width="2"/><path d="M320 240 L380 240 L380 270 L320 270 Z" stroke="%230F4C81" stroke-width="2"/><path d="M350 220 L350 240" stroke="%230F4C81" stroke-width="2"/></svg>');
+        }
+
+        .login-stage {
+            flex: 1 1 auto;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 16px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 18px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .simple-login-card {
+            width: min(100%, 460px);
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 2px;
+            box-shadow: 0 12px 32px rgba(15, 76, 129, 0.12);
+            overflow: hidden;
+            border: 1px solid rgba(15, 76, 129, 0.06);
+        }
+
+        .simple-card-header {
+            text-align: center;
+            padding: 16px 16px 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .simple-card-header h2 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1E293B;
+            letter-spacing: 0.2px;
+        }
+        .lock-icon {
+            width: 44px;
+            height: 44px;
+            margin: 0 auto;
+            background: #1E293B;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .lock-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+        }
+
+        .simple-card-body {
+            padding: 20px 18px 14px;
+        }
+
+        .simple-form-row {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .simple-form-row label {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #1E293B;
+            text-align: right;
+            padding-right: 4px;
+        }
+        .simple-form-row input[type="text"],
+        .simple-form-row input[type="password"] {
+            width: 100%;
+            min-height: 34px;
+            padding: 4px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 2px;
+            font-size: 13.5px;
+            color: #1E293B;
+            background: #fff;
+            outline: none;
+            transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .simple-form-row input:focus {
+            border-color: #DC2626;
+            box-shadow: 0 0 0 2px rgba(94, 185, 177, 0.18);
+        }
+
+        .simple-captcha-row {
+            display: grid;
+            grid-template-columns: 110px 1fr;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .simple-captcha-row > label {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #1E293B;
+            text-align: right;
+            padding-right: 4px;
+        }
+        .simple-captcha-controls {
+            display: grid;
+            grid-template-columns: 100px 34px 1fr;
+            gap: 8px;
+            align-items: center;
+        }
+        .captcha-image-box {
+            height: 36px;
+            border: 1px solid #cbd5e1;
+            border-radius: 2px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', monospace;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #2e7d32;
+            font-style: italic;
+            user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+        .captcha-image-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 8px,
+                rgba(0,0,0,0.04) 8px,
+                rgba(0,0,0,0.04) 9px
+            );
+            pointer-events: none;
+        }
+        .captcha-image-box span {
+            display: inline-block;
+        }
+        .captcha-image-box span:nth-child(1) { transform: rotate(-4deg) skewX(-6deg); }
+        .captcha-image-box span:nth-child(2) { transform: rotate(3deg) skewX(4deg); }
+        .captcha-image-box span:nth-child(3) { transform: rotate(-2deg) skewY(3deg); }
+        .captcha-image-box span:nth-child(4) { transform: rotate(5deg) skewX(-3deg); }
+        .captcha-image-box span:nth-child(5) { transform: rotate(-5deg) skewY(-2deg); }
+        .captcha-image-box span:nth-child(6) { transform: rotate(2deg) skewX(5deg); }
+        .captcha-image-box span:nth-child(7) { transform: rotate(-3deg); }
+
+        .captcha-refresh-btn {
+            width: 34px;
+            height: 36px;
+            border: 1px solid #cbd5e1;
+            border-radius: 2px;
+            background: #fff;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #1E293B;
+            transition: background 0.15s ease;
+            padding: 0;
+        }
+        .captcha-refresh-btn:hover { background: #f0f0f0; }
+        .captcha-refresh-btn svg {
+            width: 17px; height: 17px; fill: none;
+            stroke: currentColor; stroke-width: 2.2;
+            stroke-linecap: round; stroke-linejoin: round;
+        }
+        .simple-captcha-controls input {
+            height: 36px;
+            padding: 4px 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 2px;
+            font-size: 13.5px;
+            color: #1E293B;
+            background: #fff;
+            outline: none;
+            width: 100%;
+        }
+        .simple-captcha-controls input:focus {
+            border-color: #DC2626;
+            box-shadow: 0 0 0 2px rgba(94, 185, 177, 0.18);
+        }
+
+        .simple-action-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin-top: 8px;
+        }
+        .simple-forgot {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2a7a2a;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .simple-forgot:hover { text-decoration: underline; }
+
+        .simple-login-btn {
+            min-width: 150px;
+            padding: 8px 18px;
+            background: #DC2626;
+            color: #fff;
+            border: none;
+            border-radius: 2px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+        .simple-login-btn:hover { background: #4faaa2; }
+        .simple-login-btn:active { background: #449991; }
+        .simple-login-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+        .simple-card-footer {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 2px 18px 18px;
+        }
+        .info-icon {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: #2a7a2a;
+            color: #fff;
+            font-size: 10px; font-weight: 700;
+            text-align: center; line-height: 14px;
+            margin-left: 3px;
+            vertical-align: middle;
+        }
+        .back-home-link {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1E293B;
+        }
+        .back-home-link a {
+            color: #DC2626;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .back-home-link a:hover { text-decoration: underline; }
+        .back-home-link a svg {
+            width: 14px; height: 14px;
+            fill: none; stroke: currentColor;
+            stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round;
+        }
+
+        .simple-alert {
+            display: none;
+            padding: 7px 12px;
+            border-radius: 3px;
+            font-size: 12.5px;
+            font-weight: 600;
+            margin: 0 18px 10px;
+        }
+        .simple-alert.error {
+            display: block;
+            background: #fde8e8;
+            color: #b42318;
+            border: 1px solid #f8c9c4;
+        }
+        .simple-alert.success {
+            display: block;
+            background: #e8f5e8;
+            color: #1e7a1e;
+            border: 1px solid #c4e0c4;
+        }
+
+        @media (max-width: 560px) {
+            .simple-form-row, .simple-captcha-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+            .simple-form-row label, .simple-captcha-row > label {
+                text-align: left; padding-right: 0;
+            }
+            .simple-captcha-controls {
+                grid-template-columns: 95px 32px 1fr;
+            }
+            .simple-action-row, .simple-card-footer {
+                grid-template-columns: 1fr;
+            }
+            .simple-login-btn {
+                width: 100%; min-width: 0;
+            }
+            .role-quick-buttons {
+                grid-template-columns: 1fr;
+            }
+            .login-stage { padding: 18px 12px 14px; }
+            .simple-card-body { padding: 18px 14px 12px; }
+            .simple-card-footer { padding: 2px 14px 14px; }
+            .simple-alert { margin: 0 14px 10px; }
+        }
+
+        .role-quick-buttons {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+            padding: 12px 14px 6px;
+            border-bottom: 1px solid #e5e7eb;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        }
+        .role-quick-btn {
+            padding: 10px 10px;
+            font-size: 13.5px;
+            font-weight: 700;
+            letter-spacing: 0.25px;
+            border-radius: 3px;
+            border: 1px solid #DC2626;
+            background: #DC2626;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .role-quick-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(15,76,129,0.10); }
+        .role-quick-hint {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #64748b;
+            margin: 2px 0 2px;
+        }
+        .role-quick-hint strong { color: #DC2626; }
+
+        .simple-form-row input[placeholder*="MH"] {
+            text-transform: uppercase;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         HEADER — Fixed White Top Bar
+    ============================================= -->
+    <header class="site-header" id="siteHeader">
+        <div class="header-inner">
+            <div class="header-brand">
+                <div class="header-emblem">
+                    <img src="../image.png" alt="Bharat RTO Portal Emblem" class="header-emblem-img" onerror="this.style.opacity=0">
+                </div>
+                <div class="brand-text">
+                    
+                    <span class="brand-project">Smart Saarthi</span>
+                    <span class="brand-ministry">Ministry of Road Transport &amp; Highways</span>
+                    
+                </div>
+            </div>
+            <div class="header-controls">
+                <div class="header-lang-row">
+                    <div class="lang-select-wrap">
+                        <select class="lang-select" id="langSelect" aria-label="Language">
+                            <option value="en">English</option>
+                            <option value="mr">मराठी</option>
+                        </select>
+                    </div>
+                    <a href="#" class="lang-link" data-lang="en">English</a>
+                    <span class="lang-sep">|</span>
+                    <a href="#" class="lang-link" data-lang="mr">मराठी</a>
+                    <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                    <a href="index.html" class="header-login-btn" data-i18n="home">Home</a>
+                </div>
+                <div class="header-datetime">
+                    <div class="dt-calendar">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#0A3D7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
+                    </div>
+                    <div class="dt-text">
+                        <span class="dt-date" id="liveDate">31 July 2026</span>
+                        <span class="dt-time" id="liveTime">Friday, 12:00 PM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tricolor-strip">
+            <span class="tri-saffron"></span>
+            <span class="tri-white"></span>
+            <span class="tri-green"></span>
+        </div>
+    </header>
+
+    <!-- ============================================
+         MAIN CONTENT
+    ============================================= -->
+    <main class="login-stage">
+
+        <div class="simple-login-card fade-in-up">
+            <div class="role-quick-buttons">
+                <button type="button" class="role-quick-btn rq-police" id="policeQuickBtn" data-i18n="police">Police Department — Autofill Credentials</button>
+                <div class="role-quick-hint">This page is for <strong>Police Department</strong> only. Click above to autofill demo credentials (password: pass1234).</div>
+            </div>
+            <div class="simple-card-header">
+                <h2 data-i18n="loginCardTitle">Police Sign in</h2>
+                <div class="lock-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="simple-alert" id="alertBox"></div>
+
+            <form id="loginForm" autocomplete="on" novalidate>
+                <div class="simple-card-body">
+                    <div class="simple-form-row">
+                        <label for="username" data-i18n="username">Username:</label>
+                        <input id="username" name="username" type="text" placeholder="Police Username" autocomplete="username">
+                    </div>
+                    <div class="simple-form-row">
+                        <label for="password" data-i18n="password">Password:</label>
+                        <input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password">
+                    </div>
+                    <div class="simple-captcha-row">
+                        <label for="captchaInput">Captcha:</label>
+                        <div>
+                            <div class="simple-captcha-controls">
+                                <div class="captcha-image-box" id="captchaImage" aria-label="Captcha text"></div>
+                                <button type="button" class="captcha-refresh-btn" id="captchaRefresh" title="Refresh captcha" aria-label="Refresh captcha">
+                                    <svg viewBox="0 0 24 24">
+                                        <polyline points="23 4 23 10 17 10"></polyline>
+                                        <polyline points="1 20 1 14 7 14"></polyline>
+                                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                                    </svg>
+                                </button>
+                                <input id="captchaInput" name="captcha" type="text" placeholder="Captcha" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="simple-action-row">
+                        <a class="simple-forgot" id="forgotLink" href="javascript:void(0)">
+                            Forgot your password<span class="info-icon">?</span>
+                        </a>
+                        <button type="submit" class="simple-login-btn" id="loginButton" data-i18n="loginBtn">LOGIN</button>
+                    </div>
+                </div>
+                <div class="simple-card-footer">
+                    <div></div>
+                    <div class="back-home-link">
+                        Back to
+                        <a href="index.html" id="backLink">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                                <polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            homepage
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- ============================================
+         FOOTER — Dark Blue Bottom Bar
+    ============================================= -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <div class="footer-emblem">
+                    <img src="../image.png" alt="Bharat RTO Portal Emblem" class="footer-emblem-img" onerror="this.style.opacity=0">
+                </div>
+                <span class="footer-copy">&copy; 2026 All Rights Reserved.</span>
+            </div>
+            <nav class="footer-links">
+                <a href="#">About Portal</a>
+                <span class="footer-sep">|</span>
+                <a href="#">Citizen Services</a>
+                <span class="footer-sep">|</span>
+                <a href="#">Important Links</a>
+                <span class="footer-sep">|</span>
+                <a href="#">Help Desk</a>
+                <span class="footer-sep">|</span>
+                <a href="#">Contact</a>
+                <span class="footer-sep">|</span>
+                <a href="#">FAQ</a>
+                <span class="footer-sep">|</span>
+                <a href="#">Privacy Policy</a>
+                <span class="footer-sep">|</span>
+                <a href="#">Terms</a>
+                <span class="footer-sep">|</span>
+                <a href="#">Accessibility</a>
+            </nav>
+            <div class="footer-version">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                </svg>
+                Version 2.0
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/data.js"></script>
+    <script src="js/clock.js"></script>
+    <script>
+        (function() {
+            'use strict';
+
+            const API_BASE_URL = 'http://localhost:8081/api';
+            const STORAGE_KEY = 'vehical_auth_data';
+
+            const CONFIG = {
+                endpoints: { login: '/auth/login', roles: '/auth/roles', me: '/auth/me', logout: '/auth/logout' },
+                dashboards: {
+                    POLICE: 'pages/police-dashboard.html'
+                }
+            };
+
+            const state = { currentCaptcha: '', selectedRole: 'POLICE' };
+
+            const demoAccounts = {
+                police_admin:   { role: 'POLICE', fullName: 'Rajesh Kumar', email: 'rajesh.kumar@police.gov.in', department: 'Traffic Police Department - Mumbai', phone: '+91-98765-43210' },
+                police_inspector: { role: 'POLICE', fullName: 'Amit Sharma', email: 'amit.sharma@police.gov.in', department: 'RTO Enforcement Wing - Delhi', phone: '+91-98765-43211' }
+            };
+
+            const POLICE_PRESETS = [
+                { username: 'police_admin',      password: 'pass1234', role: 'POLICE', label: 'Police Department (police_admin)' },
+                { username: 'police_inspector',  password: 'pass1234', role: 'POLICE', label: 'Police Department (police_inspector)' }
+            ];
+
+            const elements = {
+                loginForm: document.getElementById('loginForm'),
+                usernameInput: document.getElementById('username'),
+                passwordInput: document.getElementById('password'),
+                captchaInput: document.getElementById('captchaInput'),
+                captchaImage: document.getElementById('captchaImage'),
+                captchaRefresh: document.getElementById('captchaRefresh'),
+                loginButton: document.getElementById('loginButton'),
+                alertBox: document.getElementById('alertBox'),
+                forgotLink: document.getElementById('forgotLink'),
+                backLink: document.getElementById('backLink'),
+                policeQuickBtn: document.getElementById('policeQuickBtn')
+            };
+
+            function generateCaptcha() {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789';
+                let result = '';
+                for (let i = 0; i < 6; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                state.currentCaptcha = result;
+                renderCaptcha();
+            }
+
+            function renderCaptcha() {
+                const img = elements.captchaImage;
+                img.innerHTML = '';
+                for (let i = 0; i < state.currentCaptcha.length; i++) {
+                    const span = document.createElement('span');
+                    span.textContent = state.currentCaptcha.charAt(i);
+                    img.appendChild(span);
+                }
+            }
+
+            function verifyCaptcha(input) {
+                if (!input) return false;
+                return input.toLowerCase() === state.currentCaptcha.toLowerCase();
+            }
+
+            function init() {
+                generateCaptcha();
+                setupPoliceQuickButton();
+                setupCaptchaRefresh();
+                setupFormSubmission();
+                setupForgotPassword();
+                setupHeaderScroll();
+            }
+
+            function setupHeaderScroll() {
+                const header = document.getElementById('siteHeader');
+                if (!header) return;
+                const onScroll = () => {
+                    if (window.scrollY > 4) header.classList.add('header-scrolled');
+                    else header.classList.remove('header-scrolled');
+                };
+                window.addEventListener('scroll', onScroll, { passive: true });
+                onScroll();
+            }
+
+            function setupCaptchaRefresh() {
+                elements.captchaRefresh.addEventListener('click', () => {
+                    generateCaptcha();
+                    elements.captchaInput.value = '';
+                    elements.captchaInput.focus();
+                });
+            }
+
+            let policeClickCount = 0;
+            function setupPoliceQuickButton() {
+                elements.policeQuickBtn.addEventListener('click', function() {
+                    const preset = POLICE_PRESETS[policeClickCount % POLICE_PRESETS.length];
+                    policeClickCount++;
+                    elements.usernameInput.value = preset.username;
+                    elements.passwordInput.value = preset.password;
+                    state.selectedRole = preset.role;
+                    generateCaptcha();
+                    elements.captchaInput.value = '';
+                    elements.captchaInput.focus();
+                    clearAlerts();
+                    showAlert(preset.label + ' credentials filled. Enter the captcha shown and click LOGIN.', 'success');
+                });
+            }
+
+            function setupFormSubmission() {
+                elements.loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    clearAlerts();
+
+                    const captchaVal = elements.captchaInput.value.trim();
+
+                    if (!captchaVal) { showAlert('Please enter the captcha code.', 'error'); shakeForm(); return; }
+                    if (!verifyCaptcha(captchaVal)) {
+                        showAlert('Captcha verification failed. Please try again.', 'error');
+                        shakeForm();
+                        generateCaptcha();
+                        elements.captchaInput.value = '';
+                        elements.captchaInput.focus();
+                        return;
+                    }
+
+                    const username = elements.usernameInput.value.trim();
+                    const password = elements.passwordInput.value;
+
+                    if (!username) { showAlert('Please enter your username.', 'error'); shakeForm(); return; }
+                    if (!password) { showAlert('Please enter your password.', 'error'); shakeForm(); return; }
+
+                    setLoading(true);
+                    try {
+                        const response = await attemptLogin(username, password, state.selectedRole);
+                        if (response.success) {
+                            showAlert('Login successful! Redirecting to dashboard...', 'success');
+                            saveAuthData(response.data);
+                            setTimeout(() => redirectToDashboard(response.data.role), 600);
+                        } else {
+                            showAlert(response.message || 'Login failed. Please try again.', 'error');
+                            shakeForm();
+                            generateCaptcha();
+                            elements.captchaInput.value = '';
+                        }
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        showAlert(error.message || 'Unable to connect to server. Please check your connection and try again.', 'error');
+                        shakeForm();
+                        generateCaptcha();
+                        elements.captchaInput.value = '';
+                    } finally {
+                        setLoading(false);
+                    }
+                });
+            }
+
+            async function attemptLogin(username, password, role) {
+                const payload = { username, password };
+                if (role) payload.role = role;
+
+                const runFallback = () => {
+                    try {
+                        const fallbackResult = simulateLogin(username, password, role);
+                        if (fallbackResult && fallbackResult.success) {
+                            fallbackResult.message = (fallbackResult.message || '') + '  ·  Backend offline → using Demo Mode';
+                        }
+                        return fallbackResult;
+                    } catch (fallbackError) {
+                        return {
+                            success: false,
+                            message: 'Login failed. Click "Police Department — Autofill Credentials" above (password: pass1234).'
+                        };
+                    }
+                };
+
+                let timedOut = false;
+                const abortCtrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+                const timeoutId = abortCtrl ? setTimeout(() => { timedOut = true; abortCtrl.abort(); }, 3000) : null;
+
+                try {
+                    const fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                        body: JSON.stringify(payload)
+                    };
+                    if (abortCtrl) fetchOptions.signal = abortCtrl.signal;
+                    const response = await fetch(API_BASE_URL + CONFIG.endpoints.login, fetchOptions);
+                    if (timeoutId) clearTimeout(timeoutId);
+                    let responseData;
+                    try { responseData = await response.json(); } catch (_parseErr) { responseData = {}; }
+                    if (response.ok && responseData && responseData.success !== false) {
+                        return {
+                            success: true,
+                            message: responseData && responseData.message ? responseData.message : 'Login successful',
+                            data: responseData ? responseData.data : undefined
+                        };
+                    }
+                    if (responseData && typeof responseData === 'object') {
+                        if (responseData.success === false && responseData.message) {
+                            if (username && password) return runFallback();
+                            return responseData;
+                        }
+                    }
+                    if (username && password) return runFallback();
+                    return { success: false, message: responseData ? (responseData.message || 'Login failed') : 'Login failed' };
+                } catch (networkError) {
+                    if (timeoutId) clearTimeout(timeoutId);
+                    if (username && password) return runFallback();
+                    if (timedOut) return { success: false, message: 'Server timed out. Try demo credentials (Police Department).' };
+                    return { success: false, message: 'Cannot reach the authentication server.' };
+                }
+            }
+
+            function simulateLogin(username, password, role) {
+                const account = demoAccounts[username.toLowerCase()];
+                if (!account || password.length < 4) {
+                    return { success: false, message: 'Invalid username or password. Click "Police Department — Autofill Credentials" above (password: pass1234).' };
+                }
+                if (role && account.role !== role) {
+                    return { success: false, message: `Role mismatch. This account belongs to ${account.role.replace('_', ' ')}` };
+                }
+                if (!state.selectedRole && account.role) state.selectedRole = account.role;
+                const fakeToken = 'demo_token_' + btoa(JSON.stringify({ u: username, r: account.role, t: Date.now() }));
+                return {
+                    success: true,
+                    message: 'Login successful (Demo Mode)',
+                    data: {
+                        token: fakeToken, tokenType: 'Bearer', expiresIn: 86400,
+                        userId: Math.floor(Math.random() * 1000) + 1,
+                        username, fullName: account.fullName, email: account.email,
+                        phone: account.phone, role: account.role,
+                        department: account.department || null,
+                        centerName: account.centerName || null,
+                        agencyName: account.agencyName || null,
+                        licenseNumber: account.licenseNumber || null,
+                        loginTime: new Date().toISOString()
+                    }
+                };
+            }
+
+            function saveAuthData(data) {
+                const authRecord = {
+                    token: data.token, tokenType: data.tokenType,
+                    expiresAt: Date.now() + (data.expiresIn * 1000),
+                    user: {
+                        id: data.userId, username: data.username, fullName: data.fullName,
+                        email: data.email, phone: data.phone, role: data.role,
+                        department: data.department, centerName: data.centerName,
+                        agencyName: data.agencyName, licenseNumber: data.licenseNumber
+                    },
+                    loginTime: data.loginTime || Date.now()
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(authRecord));
+            }
+
+            function redirectToDashboard(role) {
+                const dashboard = CONFIG.dashboards[role];
+                if (!dashboard) { showAlert('Invalid user role. Please contact administrator.', 'error'); return; }
+                window.location.href = dashboard;
+            }
+
+            function setLoading(isLoading) {
+                elements.loginButton.disabled = isLoading;
+                elements.loginButton.textContent = isLoading ? 'LOGGING IN...' : 'LOGIN';
+            }
+
+            function clearAlerts() {
+                elements.alertBox.style.display = 'none';
+                elements.alertBox.className = 'simple-alert';
+                elements.alertBox.textContent = '';
+            }
+
+            function showAlert(message, type) {
+                elements.alertBox.textContent = message;
+                elements.alertBox.className = `simple-alert ${type}`;
+                elements.alertBox.style.display = 'block';
+            }
+
+            function shakeForm() {
+                const card = document.querySelector('.simple-login-card');
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = 'shake 0.4s ease-in-out';
+            }
+
+            function setupForgotPassword() {
+                elements.forgotLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showAlert('Please contact IT Helpdesk at 1800-1234-567 or support@bharatrto.gov.in to reset your password.', 'success');
+                });
+            }
+
+            const shakeStyle = document.createElement('style');
+            shakeStyle.textContent = `
+                @keyframes shake {
+                    0%, 100% { transform: translateX(0); }
+                    20% { transform: translateX(-8px); }
+                    40% { transform: translateX(8px); }
+                    60% { transform: translateX(-6px); }
+                    80% { transform: translateX(6px); }
+                }
+            `;
+            document.head.appendChild(shakeStyle);
+
+            let _initialized = false;
+            function safeInit() {
+                if (_initialized) return;
+                _initialized = true;
+                init();
+            }
+            document.addEventListener('DOMContentLoaded', safeInit);
+            if (document.readyState !== 'loading') safeInit();
+        })();
+    </script>
+</body>
+</html>

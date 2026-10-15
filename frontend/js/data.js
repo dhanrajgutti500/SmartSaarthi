@@ -62,16 +62,25 @@
 
         for (var i = 0; i < N; i++){
             var reg;
-            do { reg = regNumber(i+ri(17)); } while (regUsed[reg]);
+            // For first 6 vehicles (demo citizen accounts), use specific registration numbers
+            if (i < 6) {
+                var demoRegs = ['MH-02-AB-1234', 'MH-02-CD-5678', 'DL-03-EF-9012', 'MH-02-GH-3456', 'KA-04-JK-7890', 'TN-05-LM-8901'];
+                reg = demoRegs[i];
+            } else {
+                do { reg = regNumber(i+ri(17)); } while (regUsed[reg]);
+            }
             regUsed[reg] = true;
 
             var first = rp(FIRST), last = rp(LAST);
-            var name  = first+' '+last;
+            // For first 6 demo citizen accounts, use specific names
+            var demoNames = ['Anjali Verma', 'Rahul Sharma', 'Priya Singh', 'Amit Kumar', 'Sneha Patel', 'Sanjay Reddy'];
+            var name = (i < 6) ? demoNames[i] : (first+' '+last);
             var fuel  = rp(FUELS);
             var model = rp(CARS);
             var year  = rp(YEARS);
             var carModel = model + ' ' + year;
-            var ownerPhone = phone();
+            // For first 6 demo citizen accounts, use specific phone numbers
+            var ownerPhone = (i < 6) ? '+91-987654324' + i : phone();
             var engPrefix = 'EN' + STATES[i % STATES.length] + pad(ri(99),2);
             var engineNo = engPrefix + pad(100000 + ri(899999), 6);
             var chassisNo = 'CH' + pad(ri(99999999),8) + 'MS' + pad(i,3);
@@ -217,7 +226,8 @@
             });
 
             // Generate challan data
-            var hasChallan = rand() < 0.25; // 25% of vehicles have challans
+            // For first 6 demo citizen accounts, always add pending challans
+            var hasChallan = (i < 6) ? true : (rand() < 0.25); // Demo accounts always have challans
             if (hasChallan) {
                 var challanCount = 1 + (rand() < 0.3 ? 1 : 0); // 1-2 challans
                 for (var c = 0; c < challanCount; c++) {
@@ -225,10 +235,12 @@
                     var challanType = rp(challanTypes);
                     var fineAmount = 500 + ri(2000);
                     var challanDate = addDays(TODAY, -ri(180));
-                    var isPaid = rand() < 0.6; // 60% paid
-                    
+
                     var challanNo = 'CHL' + STATES[i % STATES.length] + pad(TODAY.getFullYear(), 4) + pad(i+1, 6) + pad(c+1, 2);
-                    
+
+                    // For first 6 demo citizen accounts, ensure pending challans
+                    var isPaid = (i < 6) ? false : (rand() < 0.6); // Demo accounts always have pending challans
+
                     CHALLANS.push({
                         i: CHALLANS.length,
                         challanNo: challanNo,

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartSaarthi - ANPR Scanner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Smart Saarthi - ANPR Scanner</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -390,6 +390,121 @@
             margin-bottom: 16px;
         }
 
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 16px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 28px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+            animation: modalPop 0.25s ease-out;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .modal-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .modal-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--primary-blue);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .modal-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+        }
+
+        .modal-input {
+            width: 100%;
+            border: 2px solid var(--border-color);
+            padding: 14px 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: inherit;
+            color: var(--text-primary);
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal-actions .btn {
+            flex: 1;
+        }
+
+        .modal-error {
+            color: var(--accent-red);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .modal-error.show {
+            display: block;
+        }
+
         /* ============================================
            RESPONSIVE BREAKPOINTS FOR ANPR
            ============================================ */
@@ -562,8 +677,8 @@
                 <p class="page-subtitle">Review the captured photo</p>
                 
                 <div class="camera-preview" id="capturedPreview" style="background: var(--dark-bg);">
-                    <img id="capturedImage" src="" alt="Captured" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                    <span>[ Captured Photo ]</span>
+                    <img id="capturedImage" src="" alt="Captured" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;">
+                    <span id="capturedPlaceholder">[ Captured Photo ]</span>
                 </div>
                 
                 <div class="card" style="text-align: center;">
@@ -734,8 +849,8 @@
                 <div class="card">
                     <h3>Evidence</h3>
                     <div class="camera-preview" style="height: 200px;">
-                        <img id="reviewImage" src="" alt="Evidence" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                        <span style="font-size: 12px;">[ Evidence Photo ]</span>
+                        <img id="reviewImage" src="" alt="Evidence" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; display: none;">
+                        <span id="reviewPlaceholder" style="font-size: 12px;">[ Evidence Photo ]</span>
                     </div>
                 </div>
                 
@@ -835,6 +950,25 @@
         </div>
     </div>
 
+    <!-- Plate Number Input Modal -->
+    <div class="modal-overlay" id="plateModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="modal-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+                </div>
+                <h3 class="modal-title">Enter Vehicle Number</h3>
+            </div>
+            <p class="modal-subtitle">Enter the vehicle number plate visible in the captured photo to fetch the vehicle details from the database.</p>
+            <input type="text" class="modal-input" id="modalPlateInput" placeholder="e.g. MH04AB1234" autocomplete="off">
+            <div class="modal-error" id="modalError">Please enter a valid vehicle number (at least 4 characters).</div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="closePlateModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmPlateModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         let stream = null;
         let capturedPhoto = null;
@@ -891,27 +1025,52 @@
             
             document.getElementById('capturedImage').src = capturedPhoto;
             document.getElementById('capturedImage').style.display = 'block';
+            document.getElementById('capturedPlaceholder').style.display = 'none';
             stopCamera();
             navigateTo(3);
         }
 
         function retakePhoto() {
             capturedPhoto = null;
+            document.getElementById('capturedImage').style.display = 'none';
+            document.getElementById('capturedPlaceholder').style.display = '';
             startCamera();
         }
 
         function usePhoto() {
             document.getElementById('reviewImage').src = capturedPhoto;
             document.getElementById('reviewImage').style.display = 'block';
-            
-            // Prompt user to enter plate number
-            const plate = prompt('Enter the vehicle number from the photo:');
-            if (plate && plate.trim().length >= 4) {
-                document.getElementById('manualInput').value = plate.trim().toUpperCase();
-                fetchVehicleData();
-            } else {
-                navigateTo(4);
+            document.getElementById('reviewPlaceholder').style.display = 'none';
+
+            // Open plate number input modal
+            const modal = document.getElementById('plateModal');
+            const input = document.getElementById('modalPlateInput');
+            const error = document.getElementById('modalError');
+            input.value = '';
+            error.classList.remove('show');
+            modal.classList.add('active');
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function closePlateModal() {
+            document.getElementById('plateModal').classList.remove('active');
+            navigateTo(4);
+        }
+
+        function confirmPlateModal() {
+            const input = document.getElementById('modalPlateInput');
+            const error = document.getElementById('modalError');
+            const plate = input.value.trim().toUpperCase();
+
+            if (!plate || plate.length < 4) {
+                error.classList.add('show');
+                input.focus();
+                return;
             }
+
+            document.getElementById('plateModal').classList.remove('active');
+            document.getElementById('manualInput').value = plate;
+            fetchVehicleData();
         }
 
         function showVideoOption() {
@@ -987,7 +1146,16 @@
             }
         });
 
-        function issueChallan() {
+        // Allow Enter key to confirm the plate number modal
+        document.getElementById('modalPlateInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                confirmPlateModal();
+            } else if (e.key === 'Escape') {
+                closePlateModal();
+            }
+        });
+
+        async function issueChallan() {
             const violation = document.getElementById('violationSelect').value;
             if (!violation) {
                 alert('Please select a violation type');
@@ -999,25 +1167,73 @@
                 alert('Please enter violation location');
                 return;
             }
-            
-            // Update review data
-            const violationName = document.getElementById('violationSelect').options[document.getElementById('violationSelect').selectedIndex].text;
-            document.getElementById('reviewViolation').textContent = violationName;
-            document.getElementById('reviewFine').textContent = '₹ ' + document.getElementById('fineAmount').value;
-            document.getElementById('finalViolation').textContent = violationName;
-            document.getElementById('finalFine').textContent = '₹ ' + document.getElementById('fineAmount').value;
-            
+
+            // Map frontend violation codes to database violation_master IDs
+            const violationIdMap = {
+                'V001': '5',   // No Parking -> Wrong Parking
+                'V002': '4',   // Red Light Jump -> Signal Jump / Red Light
+                'V003': '7',   // Over Speeding
+                'V004': '13',  // Wrong Side Driving
+                'V005': '1',   // No Helmet -> Not Wearing Helmet
+                'V006': '2'    // No Seat Belt -> Not Wearing Seatbelt
+            };
+
             // Generate challan number
             const challanNo = 'CH-2026-' + String(Math.floor(Math.random() * 999999)).padStart(6, '0');
-            document.getElementById('challanNo').textContent = challanNo;
-            
-            // Set date time
+
+            // Set date time for display and DB (YYYY-MM-DD)
             const now = new Date();
-            const dateTimeStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + 
+            const challanDate = now.toISOString().split('T')[0];
+            const dateTimeStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' +
                               now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('finalDateTime').textContent = dateTimeStr;
-            
-            navigateTo(9);
+
+            // Parse fine amount (remove commas)
+            const fineAmountStr = document.getElementById('fineAmount').value.replace(/,/g, '');
+            const totalFineAmount = parseInt(fineAmountStr, 10) || 0;
+
+            // Use the vehicle number exactly as stored in the DB (from lookup response)
+            const vehicleNo = vehicleData ? vehicleData.vehicleNo : document.getElementById('finalPlate').textContent;
+            // Use a valid officer ID that exists in the police_officer table
+            const officerId = 'PO11223';
+
+            try {
+                const response = await fetch('/api/admin/challans', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        challanNumber: challanNo,
+                        vehicleNo: vehicleNo,
+                        officerId: officerId,
+                        violationIds: violationIdMap[violation] || violation,
+                        totalFineAmount: totalFineAmount,
+                        challanDate: challanDate,
+                        location: location,
+                        status: 'PENDING_PAYMENT',
+                        remarks: 'Issued via ANPR scanner'
+                    })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Update review data
+                    const violationName = document.getElementById('violationSelect').options[document.getElementById('violationSelect').selectedIndex].text;
+                    document.getElementById('reviewViolation').textContent = violationName;
+                    document.getElementById('reviewFine').textContent = '₹ ' + document.getElementById('fineAmount').value;
+                    document.getElementById('finalViolation').textContent = violationName;
+                    document.getElementById('finalFine').textContent = '₹ ' + document.getElementById('fineAmount').value;
+
+                    document.getElementById('challanNo').textContent = challanNo;
+                    document.getElementById('finalDateTime').textContent = dateTimeStr;
+
+                    navigateTo(9);
+                } else {
+                    alert('Failed to issue challan: ' + (result.message || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error issuing challan:', error);
+                alert('Error issuing challan. Please try again.');
+            }
         }
 
         function downloadPDF() {

@@ -14,13 +14,13 @@ const translations = {
         ministryHindi: "सड़क परिवहन और राजमार्ग मंत्रालय",
         ministryEnglish: "Ministry of Road Transport & Highways",
         govText: "Government of India",
-        portalName: "SmartSarthi",
+        portalName: "Smart Saarthi",
         portalSub: "PARIVAHAN SARATHI",
         
         // Hero Section
         loginTitle: "Login to Your Account",
         loginDigital: "Login with Digital Seva",
-        loginSmart: "Login with SmartSarthi e-Services",
+        loginSmart: "Login with Smart Saarthi e-Services",
         newUser: "New User? Register Here",
         forgotPwd: "Forgot Password?",
         

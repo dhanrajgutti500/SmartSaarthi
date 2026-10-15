@@ -2,668 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Citizen Dashboard - Vehicle Verification Portal</title>
     <link rel="stylesheet" href="../css/dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* ====================================================
-           CITIZEN PORTAL — FULL RED THEME (Parivahan Sewa)
-           ==================================================== */
-        :root {
-            --cz-deep:      #7F1D1D;
-            --cz-primary:   #B91C1C;
-            --cz-main:      #DC2626;
-            --cz-bright:    #EF4444;
-            --cz-soft:      #F87171;
-            --cz-pale:      #FECACA;
-            --cz-ghost:     #FEE2E2;
-            --cz-tint:      #FFF1F1;
-            --cz-surface:   #FFF5F5;
-        }
-        html, body { background: var(--cz-tint) !important; }
-
-        .citizen-layout {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background: var(--cz-tint);
-        }
-
-        .top-navbar {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-        }
-
-        /* ===== Top Navbar — Deep Red ===== */
-        .citizen-layout > .top-navbar {
-            background: linear-gradient(135deg, var(--cz-deep) 0%, var(--cz-primary) 55%, var(--cz-main) 100%) !important;
-            box-shadow: 0 3px 14px rgba(127, 29, 29, 0.35), inset 0 -4px 0 0 var(--cz-bright);
-            border-bottom: none !important;
-        }
-        .citizen-layout > .top-navbar .navbar-content { height: 70px; }
-        .citizen-layout > .top-navbar .navbar-brand {
-            color: #FFFFFF !important;
-            text-shadow: 0 1px 0 rgba(127,29,29,0.6);
-        }
-        .citizen-layout > .top-navbar .navbar-brand svg {
-            color: var(--cz-soft) !important;
-            filter: drop-shadow(0 1px 0 rgba(127,29,29,0.6));
-        }
-        .citizen-layout > .top-navbar .brand-text {
-            font-family: 'Playfair Display', Georgia, serif;
-            font-weight: 700;
-            font-size: 20px;
-            letter-spacing: 0.4px;
-        }
-        .citizen-layout > .top-navbar .nav-item {
-            color: var(--cz-ghost) !important;
-            font-weight: 600;
-            font-size: 14px;
-            padding: 6px 14px;
-            border-radius: 6px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(254, 202, 202, 0.35);
-        }
-        .citizen-layout > .top-navbar .logout-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(254, 202, 202, 0.55) !important;
-            border-radius: 6px;
-            color: #FFFFFF !important;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .citizen-layout > .top-navbar .logout-btn:hover {
-            background: #FFFFFF !important;
-            color: var(--cz-primary) !important;
-            border-color: #FFFFFF !important;
-            transform: translateY(-1px);
-        }
-
-        .layout-body {
-            display: flex;
-            flex: 1;
-            margin-top: 70px;
-        }
-
-        /* ===== Sidebar — Deep Red Night ===== */
-        .citizen-sidebar {
-            background: linear-gradient(180deg, #7F1D1D 0%, #991B1B 55%, #B91C1C 100%) !important;
-            padding: 20px 0 12px;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 70px;
-            left: 0;
-            bottom: 0;
-            width: 240px;
-            overflow-y: auto;
-            z-index: 900;
-            border-right: 1px solid rgba(254, 202, 202, 0.25);
-        }
-        @media (max-width: 1024px) {
-            .citizen-sidebar { display: none; }
-        }
-
-        .citizen-main {
-            background: linear-gradient(180deg, var(--cz-tint) 0%, var(--cz-surface) 100%) !important;
-            padding: 0;
-            overflow-y: auto;
-            flex: 1;
-            margin-left: 240px;
-        }
-        @media (max-width: 1024px) {
-            .citizen-main { margin-left: 0; }
-        }
-
-        .sidebar-header {
-            padding: 0 20px 20px;
-            border-bottom: 1px solid rgba(254, 202, 202, 0.35) !important;
-            margin-bottom: 6px;
-        }
-        .sidebar-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 19px;
-            font-weight: 700;
-            color: #FFFFFF !important;
-            margin-bottom: 4px;
-            letter-spacing: 0.3px;
-        }
-        .sidebar-subtitle {
-            font-size: 12px;
-            color: var(--cz-ghost) !important;
-            letter-spacing: 0.4px;
-        }
-
-        .sidebar-menu {
-            flex: 1;
-            padding: 14px 0 20px;
-            overflow-y: auto;
-        }
-
-        .menu-section {
-            padding: 16px 20px 6px;
-            font-size: 11px;
-            font-weight: 800;
-            color: var(--cz-pale) !important;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            color: var(--cz-ghost) !important;
-            text-decoration: none;
-            transition: all 0.18s ease;
-            border-left: 3px solid transparent;
-            margin: 2px 6px;
-            border-radius: 0 8px 8px 0;
-        }
-        .menu-item svg {
-            width: 18px;
-            height: 18px;
-            stroke-width: 2;
-            fill: none;
-            stroke: currentColor;
-        }
-        .menu-item span {
-            font-size: 14px;
-            font-weight: 500;
-        }
-        .menu-item:hover {
-            background: rgba(255,255,255,0.10) !important;
-            color: #FFFFFF !important;
-            border-left-color: var(--cz-soft) !important;
-        }
-        .menu-item.active {
-            background: linear-gradient(90deg, #FFFFFF 0%, rgba(255,255,255,0.96) 100%) !important;
-            color: var(--cz-primary) !important;
-            border-left-color: var(--cz-bright) !important;
-            font-weight: 700 !important;
-            box-shadow: 2px 2px 8px rgba(127, 29, 29, 0.25);
-        }
-        .menu-item.active svg {
-            color: var(--cz-main) !important;
-            filter: drop-shadow(0 1px 0 rgba(220,38,38,0.2));
-        }
-
-        .content-wrapper { padding: 24px; }
-
-        /* =========================================================
-           Dashboard citizen pages — override dashboard.css classes
-           ========================================================= */
-        .citizen-main .panel-title { color: var(--cz-deep) !important; }
-        .citizen-main .panel-title::after { background: var(--cz-main) !important; }
-
-        /* -------- Stat Cards (red-tinted palette) -------- */
-        .citizen-main .stat-card {
-            border-top: 4px solid var(--cz-main) !important;
-            box-shadow: 0 1px 3px rgba(127,29,29,0.08), 0 8px 24px -10px rgba(127, 29, 29, 0.18);
-            overflow: hidden;
-        }
-        .citizen-main .stat-card::after { opacity: 0.08 !important; }
-        .citizen-main .stat-card.police::after,
-        .citizen-main .stat-card.success::after,
-        .citizen-main .stat-card.warning::after,
-        .citizen-main .stat-card.danger::after  { background: var(--cz-main) !important; }
-
-        .citizen-main .stat-card .stat-value { color: var(--cz-deep) !important; }
-        .citizen-main .stat-card .stat-label { color: var(--cz-primary) !important; letter-spacing: 0.4px; }
-        .citizen-main .stat-card .stat-trend { color: #991B1B !important; opacity: 0.85; }
-
-        .citizen-main .stat-icon.police,
-        .citizen-main .stat-icon.success,
-        .citizen-main .stat-icon.warning,
-        .citizen-main .stat-icon.danger {
-            background: rgba(220, 38, 38, 0.12) !important;
-            color: var(--cz-main) !important;
-        }
-
-        /* -------- Info chips / status chips -------- */
-        .citizen-main .info-chip.success {
-            background: rgba(220, 38, 38, 0.10) !important;
-            border: 1px solid rgba(220, 38, 38, 0.3) !important;
-            color: var(--cz-primary) !important;
-            font-weight: 700;
-        }
-        .citizen-main .info-chip::before {
-            content: "";
-            width: 6px; height: 6px; border-radius: 50%;
-            background: var(--cz-main) !important;
-            display: inline-block;
-        }
-
-        /* -------- Data tables -------- */
-        .citizen-main .data-table thead th {
-            background: linear-gradient(180deg, var(--cz-ghost) 0%, var(--cz-pale) 100%) !important;
-            color: var(--cz-deep) !important;
-            border-bottom: 2px solid var(--cz-main) !important;
-            letter-spacing: 0.6px;
-        }
-        .citizen-main .data-table tr:hover td { background: var(--cz-tint) !important; }
-
-        /* -------- Status badges (Valid -> red-valid) -------- */
-        .citizen-main .status-badge.valid {
-            background: rgba(220, 38, 38, 0.12) !important;
-            color: var(--cz-primary) !important;
-            border: 1px solid rgba(220, 38, 38, 0.3) !important;
-        }
-        .citizen-main .status-badge.pending {
-            background: #FFF7ED !important;
-            color: #C2410C !important;
-            border: 1px solid #FDBA74 !important;
-        }
-        .citizen-main .status-badge.expired,
-        .citizen-main .status-badge.warning {
-            background: var(--cz-ghost) !important;
-            color: var(--cz-primary) !important;
-            border: 1px solid var(--cz-pale) !important;
-        }
-
-        /* -------- Quick Services links -------- */
-        .citizen-main .quick-link {
-            background: var(--cz-tint) !important;
-            border: 1px solid var(--cz-pale) !important;
-            color: var(--cz-primary) !important;
-            font-weight: 600;
-            border-radius: 10px;
-        }
-        .citizen-main .quick-link:hover {
-            background: linear-gradient(90deg, var(--cz-primary), var(--cz-main)) !important;
-            color: #FFFFFF !important;
-            border-color: var(--cz-primary) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -8px rgba(191, 25, 25, 0.45);
-        }
-        .citizen-main .quick-link svg {
-            color: var(--cz-main) !important;
-        }
-        .citizen-main .quick-link:hover svg { color: #FFFFFF !important; }
-
-        /* -------- Compliance progress bars (green -> red) -------- */
-        .citizen-main .progress-fill.success,
-        .citizen-main .progress-fill.navy,
-        .citizen-main .progress-fill.gold {
-            background: linear-gradient(90deg, var(--cz-primary) 0%, var(--cz-main) 55%, var(--cz-soft) 100%) !important;
-            box-shadow: inset 0 -1px 0 rgba(255,255,255,0.35);
-        }
-        .citizen-main .progress-fill.warning {
-            background: linear-gradient(90deg, #FB923C 0%, #F97316 100%) !important;
-        }
-        .citizen-main .progress-fill.danger {
-            background: linear-gradient(90deg, var(--cz-deep) 0%, var(--cz-primary) 100%) !important;
-        }
-        .citizen-main .progress-track {
-            background: var(--cz-ghost) !important;
-            border: 1px solid var(--cz-pale) !important;
-        }
-        .citizen-main .progress-name { color: var(--cz-deep) !important; font-weight: 600; }
-        .citizen-main .progress-value { color: var(--cz-primary) !important; font-weight: 700; }
-
-        /* -------- Activity -------- */
-        .citizen-main .activity-dot.police,
-        .citizen-main .activity-dot.success,
-        .citizen-main .activity-dot.warning,
-        .citizen-main .activity-dot.danger { background: var(--cz-main) !important; }
-        .citizen-main .activity-text { color: var(--cz-deep) !important; font-weight: 500; }
-
-        /* -------- Panel subtle red border line -------- */
-        .citizen-main .panel {
-            border-top: 2px solid rgba(220, 38, 38, 0.55) !important;
-            box-shadow: 0 1px 3px rgba(127,29,29,0.06), 0 8px 24px -14px rgba(127, 29, 29, 0.25);
-        }
-
-        /* -------- Footer tint red -------- */
-        body > .footer-bar {
-            background: #FFFFFF !important;
-            border-top: 3px solid var(--cz-main) !important;
-            color: var(--cz-deep) !important;
-        }
-        body > .footer-bar .copyright-text,
-        body > .footer-bar .version-info { color: var(--cz-primary) !important; }
-
-        /* -------- Inputs focus red ring -------- */
-        .citizen-main input:focus,
-        .citizen-main select:focus,
-        .citizen-main textarea:focus {
-            outline: none !important;
-            border-color: var(--cz-main) !important;
-            box-shadow: 0 0 0 3px rgba(220,38,38,0.15) !important;
-        }
-
-        /* -------- Buttons primary red -------- */
-        .citizen-main button.primary,
-        .citizen-main .btn-primary {
-            background: var(--cz-main) !important;
-            border-color: var(--cz-primary) !important;
-            color: #FFFFFF !important;
-        }
-        .citizen-main button.primary:hover,
-        .citizen-main .btn-primary:hover {
-            background: var(--cz-primary) !important;
-            border-color: var(--cz-deep) !important;
-        }
-
-        /* =========================================================
-           MOBILE MENU DRAWER + HAMBURGER
-           ========================================================= */
-        .mobile-menu-btn {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            padding: 0;
-            margin-right: 6px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(254, 202, 202, 0.35);
-            color: #FFFFFF;
-            cursor: pointer;
-            transition: background .2s;
-        }
-        .mobile-menu-btn:hover { background: rgba(255,255,255,0.18); }
-
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(15, 23, 42, 0.55);
-            backdrop-filter: blur(2px);
-            z-index: 899;
-            opacity: 0;
-            transition: opacity .22s ease;
-        }
-        .sidebar-overlay.is-open { display: block; opacity: 1; }
-
-        .sidebar-close-wrap {
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px 10px;
-            border-bottom: 1px solid rgba(254, 202, 202, 0.3);
-            margin-bottom: 6px;
-        }
-        .sidebar-close-title {
-            color: #FFFFFF;
-            font-weight: 700;
-            font-family: 'Playfair Display', serif;
-            font-size: 16px;
-            letter-spacing: .3px;
-        }
-        .sidebar-close-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(254, 202, 202, 0.35);
-            color: #FFFFFF;
-            cursor: pointer;
-        }
-        .sidebar-close-btn:hover { background: rgba(255,255,255,0.18); }
-
-        .d-none-mobile { display: block; } /* shown at laptop/desktop by default */
-
-        /* =========================================================
-           RESPONSIVE BREAKPOINTS
-             < 640px  : Phone (portrait)
-             < 1024px : Tablet (and landscape phones)
-             >=1280px : Laptop / Desktop
-           ========================================================= */
-
-        /* ---- TABLET (≤ 1024px) ---- */
-        @media (max-width: 1024px) {
-            .citizen-layout > .top-navbar .brand-text { font-size: 17px; }
-            .citizen-main { padding-top: 2px; }
-            .content-wrapper { padding: 18px !important; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
-            .content-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
-            body > .footer-bar { margin-left: 0 !important; padding: 12px 18px !important; }
-            .page-title { font-size: 22px !important; }
-            .stat-card .stat-value { font-size: 24px !important; }
-            .history-panel-head h3, .panel-title { font-size: 16px !important; }
-        }
-
-        /* ---- PHONE (≤ 640px) ---- */
-        @media (max-width: 640px) {
-            html, body { -webkit-text-size-adjust: 100%; }
-            .citizen-layout > .top-navbar {
-                padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
-            }
-            .citizen-layout > .top-navbar .navbar-content {
-                height: 64px !important;
-                padding: 0 14px !important;
-                gap: 6px;
-            }
-            .mobile-menu-btn { display: inline-flex; }
-
-            .brand-text { font-size: 15px !important; letter-spacing: -0.1px; }
-            .navbar-brand svg { width: 24px !important; height: 24px !important; }
-            .navbar-menu { gap: 8px !important; }
-            .d-none-mobile { display: none !important; }
-            .logout-btn { padding: 8px 10px !important; }
-            .logout-btn span { display: inline; }
-
-            .layout-body { margin-top: 64px !important; }
-            .citizen-main {
-                margin-left: 0 !important;
-                padding-top: 0;
-                padding-bottom: env(safe-area-inset-bottom);
-            }
-            .content-wrapper { padding: 14px !important; }
-
-            /* Sidebar becomes a left-side drawer on phone */
-            .citizen-sidebar {
-                top: 0 !important;
-                width: 84% !important;
-                max-width: 320px;
-                transform: translateX(-105%);
-                transition: transform .26s cubic-bezier(.2,.7,.2,1), visibility .26s;
-                visibility: hidden;
-                z-index: 950;
-                box-shadow: 4px 0 24px rgba(0,0,0,.45);
-                padding: 0 0 12px !important;
-            }
-            .citizen-sidebar.is-open {
-                transform: translateX(0);
-                visibility: visible;
-            }
-            .sidebar-close-wrap { display: flex; }
-
-            /* Stats -> single column on phone */
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 10px !important;
-                margin-bottom: 14px !important;
-            }
-            .stat-card {
-                padding: 14px !important;
-                border-radius: 12px !important;
-            }
-            .stat-card::after { width: 56px !important; height: 56px !important; }
-            .stat-icon { width: 40px !important; height: 40px !important; }
-            .stat-icon svg { width: 18px !important; height: 18px !important; }
-            .stat-header { margin-bottom: 8px !important; }
-            .stat-value { font-size: 22px !important; }
-            .stat-label { font-size: 11.5px !important; letter-spacing: .3px; }
-            .stat-trend { font-size: 11px !important; }
-
-            /* Panels */
-            .panel { border-radius: 12px !important; margin-bottom: 14px !important; }
-            .panel-header {
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                gap: 10px !important;
-                padding: 14px 14px 10px !important;
-            }
-            .panel-body { padding: 12px 10px 14px !important; }
-            .panel-title,
-            .history-panel-head h3 { font-size: 15.5px !important; }
-
-            /* Tables -> scrollable horizontally */
-            .data-table {
-                font-size: 12.5px !important;
-                min-width: 560px;
-            }
-            .data-table thead th {
-                font-size: 11px !important;
-                padding: 10px 12px !important;
-                white-space: nowrap;
-            }
-            .data-table td {
-                padding: 10px 12px !important;
-                white-space: nowrap;
-            }
-            .table-wrap {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                border-radius: 10px;
-            }
-
-            /* Quick services 1-col on tiny phones */
-            .quick-links { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
-            .quick-link { padding: 12px !important; font-size: 13px !important; border-radius: 10px !important; }
-
-            /* Progress compliance */
-            .progress-list { gap: 16px !important; }
-            .progress-item { padding: 0 !important; }
-            .progress-name { font-size: 13px !important; }
-
-            /* Activity */
-            .activity-item { padding: 12px 0 !important; }
-
-            /* Footer */
-            body > .footer-bar {
-                padding: 14px 16px calc(14px + env(safe-area-inset-bottom)) !important;
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                text-align: left !important;
-                gap: 6px !important;
-            }
-            body > .footer-bar .copyright-text,
-            body > .footer-bar .version-info { font-size: 11px !important; line-height: 1.5; }
-
-            /* Touch targets 44+ px */
-            .menu-item {
-                padding-top: 14px !important;
-                padding-bottom: 14px !important;
-                min-height: 48px;
-            }
-            .page-btn { min-height: 40px !important; min-width: 40px !important; }
-            .filter-group input,
-            .filter-group select { min-height: 46px !important; font-size: 16px !important; }
-            /* Prevent iOS zoom: inputs with <16px font auto zoom focus */
-            input, select, textarea { font-size: 16px !important; }
-            .btn { min-height: 46px !important; font-size: 14px !important; }
-        }
-
-        /* ---- SMALLEST PHONES (≤ 390px) ---- */
-        @media (max-width: 390px) {
-            .stats-grid { grid-template-columns: 1fr !important; }
-            .brand-text { font-size: 14px !important; }
-            .quick-links { grid-template-columns: 1fr !important; }
-            .info-chip { font-size: 11px !important; padding: 5px 10px !important; }
-        }
-
-        /* ---- LAPTOP / DESKTOP (≥ 1280px) ---- */
-        @media (min-width: 1280px) {
-            .citizen-main { padding-top: 0; }
-            .content-wrapper { padding: 28px 32px !important; max-width: 1680px; margin: 0 auto; }
-            .stats-grid { grid-template-columns: repeat(4, minmax(0,1fr)) !important; gap: 20px !important; }
-            .content-grid { gap: 20px !important; }
-            .stat-card { padding: 24px !important; }
-            .stat-value { font-size: 32px !important; }
-            .panel-title, .history-panel-head h3 { font-size: 18.5px !important; }
-            .citizen-layout > .top-navbar .navbar-content { max-width: 1720px; }
-            .brand-text { font-size: 22px !important; }
-        }
-
-        /* ---- LARGE DESKTOP (≥ 1600px) ---- */
-        @media (min-width: 1600px) {
-            .content-wrapper { padding: 32px 44px !important; }
-            .panel-body { padding: 22px 26px !important; }
-        }
-
-        /* ---- LANDSCAPE PHONE (≤ 820px height) ---- */
-        @media (max-height: 500px) and (orientation: landscape) {
-            .citizen-sidebar { top: 0 !important; }
-            .mobile-menu-btn { display: inline-flex; }
-        }
-    </style>
 </head>
 <body>
-    <div class="citizen-layout">
-        <!-- Header Row -->
-        <nav class="top-navbar" style="grid-column: 1 / -1;">
-            <div class="navbar-content">
-                <div class="navbar-brand">
-                    <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open navigation menu">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="22" height="22"><line x1="3" y1="6"  x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                    </button>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17H2"/></svg>
-                    <span class="brand-text">Parivahan Sewa</span>
-                </div>
-                <div class="navbar-menu">
-                    <div class="nav-item d-none-mobile">Citizen Portal</div>
-                    <button class="logout-btn" id="logoutBtn">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 20 21 4 21"/><line x1="12" y1="9" x2="12" y2="15"/></svg>
-                        <span class="d-none-mobile">Logout</span>
-                    </button>
-                </div>
-            </div>
-        </nav>
+    <main class="layout">
+        <div id="welcomeBar"></div>
 
-        <div class="layout-body">
-        <!-- Sidebar overlay backdrop (mobile drawer) -->
-        <div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true"></div>
-        <!-- Sidebar -->
-        <aside class="citizen-sidebar" id="citizenSidebar">
-            <div class="sidebar-close-wrap">
-                <span class="sidebar-close-title">Menu</span>
-                <button id="sidebarCloseBtn" class="sidebar-close-btn" aria-label="Close navigation menu">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="20" height="20"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </div>
-            <div class="sidebar-header">
-                <div class="sidebar-title">Citizen Portal</div>
-                <div class="sidebar-subtitle">Parivahan Sewa</div>
-            </div>
-            
-            <div class="sidebar-menu">
-                <div class="menu-section">Overview</div>
-                <a href="citizen-dashboard.html" class="menu-item active">
-                    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                    <span>Dashboard</span>
-                </a>
-                
-                <div class="menu-section">My Vehicles</div>
-                <a href="pay-challan.html" class="menu-item">
-                    <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                    <span>Pay Challan</span>
-                </a>
-                <a href="citizen-challan-history.html" class="menu-item">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                    <span>Challan History</span>
-                </a>
-            </div>
-        </aside>
-        
-        <main class="citizen-main">
-            <div class="content-wrapper">
         <section class="stats-grid">
             <div class="stat-card police">
                 <div class="stat-header">
@@ -671,7 +18,7 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/><path d="M5 17H2"/></svg>
                     </div>
                 </div>
-                <div class="stat-value">1</div>
+                <div class="stat-value" id="vehicleCount">0</div>
                 <div class="stat-label">My Vehicles</div>
                 <div class="stat-trend">Registered</div>
             </div>
@@ -682,9 +29,9 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                     </div>
                 </div>
-                <div class="stat-value">Valid</div>
+                <div class="stat-value" id="pucStatus">Valid</div>
                 <div class="stat-label">PUC Status</div>
-                <div class="stat-trend">Expires in 45 days</div>
+                <div class="stat-trend" id="pucTrend">Expires in 45 days</div>
             </div>
 
             <div class="stat-card warning">
@@ -693,9 +40,9 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
                     </div>
                 </div>
-                <div class="stat-value">Active</div>
+                <div class="stat-value" id="insuranceStatus">Active</div>
                 <div class="stat-label">Insurance</div>
-                <div class="stat-trend">Renews in 120 days</div>
+                <div class="stat-trend" id="insuranceTrend">Renews in 120 days</div>
             </div>
 
             <div class="stat-card danger">
@@ -704,34 +51,36 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     </div>
                 </div>
-                <div class="stat-value">0</div>
+                <div class="stat-value" id="pendingChallanCount">0</div>
                 <div class="stat-label">Pending Challans</div>
-                <div class="stat-trend">Clean Record</div>
+                <div class="stat-trend" id="challanTrend">Clean Record</div>
             </div>
         </section>
 
         <section class="content-grid">
-            <div class="panel" style="margin-bottom: 20px;">
+            <div class="panel">
                 <div class="panel-header">
                     <h3 class="panel-title">My Vehicles</h3>
                     <div class="panel-actions">
-                        <span class="info-chip success">2 Active</span>
+                        <span class="status-badge valid" id="activeVehicleBadge">1 Active</span>
                     </div>
                 </div>
                 <div class="panel-body">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Vehicle No.</th>
-                                <th>Type</th>
-                                <th>PUC Valid Till</th>
-                                <th>Insurance</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="myVehiclesTbody">
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Vehicle No.</th>
+                                    <th>Type</th>
+                                    <th>PUC Valid Till</th>
+                                    <th>Insurance</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="myVehiclesTbody">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -740,13 +89,13 @@
                     <h3 class="panel-title">Quick Services</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="quick-links">
-                        <a href="pay-challan.html" class="quick-link" id="payChallanLink">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    <div class="quick-links" style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+                        <a href="pay-challan.html" class="btn btn-outline" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                             Pay Challan
                         </a>
-                        <a href="citizen-challan-history.html" class="quick-link" id="challanHistoryLink">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        <a href="citizen-challan-history.html" class="btn btn-outline" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                             Challan History
                         </a>
                     </div>
@@ -754,94 +103,7 @@
             </div>
         </section>
 
-        <section class="content-grid" style="margin-top: 20px;">
-            <div>
-                <div class="panel" style="margin-bottom: 20px;">
-                    <div class="panel-header">
-                        <h3 class="panel-title">Compliance Status</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="progress-list">
-                            <div class="progress-item">
-                                <div class="progress-label-row">
-                                    <span class="progress-name">PUC Certificate</span>
-                                    <span class="progress-value">Valid</span>
-                                </div>
-                                <div class="progress-track">
-                                    <div class="progress-fill success" style="width: 100%;"></div>
-                                </div>
-                            </div>
-                            <div class="progress-item">
-                                <div class="progress-label-row">
-                                    <span class="progress-name">Insurance Policy</span>
-                                    <span class="progress-value">Active</span>
-                                </div>
-                                <div class="progress-track">
-                                    <div class="progress-fill success" style="width: 100%;"></div>
-                                </div>
-                            </div>
-                            <div class="progress-item">
-                                <div class="progress-label-row">
-                                    <span class="progress-name">Driving License</span>
-                                    <span class="progress-value">Valid</span>
-                                </div>
-                                <div class="progress-track">
-                                    <div class="progress-fill success" style="width: 100%;"></div>
-                                </div>
-                            </div>
-                            <div class="progress-item">
-                                <div class="progress-label-row">
-                                    <span class="progress-name">Vehicle Registration</span>
-                                    <span class="progress-value">Active</span>
-                                </div>
-                                <div class="progress-track">
-                                    <div class="progress-fill success" style="width: 100%;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div class="panel-header">
-                        <h3 class="panel-title">Recent Activity</h3>
-                    </div>
-                    <div class="panel-body">
-                        <ul class="activity-list" id="activityLogList">
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header">
-                    <h3 class="panel-title">Upcoming Renewals</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Document</th>
-                                <th>Vehicle</th>
-                                <th>Expires On</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="renewalsTbody">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-            </div>
-        </main>
-        </div>
-    </div>
-
-    <footer class="footer-bar">
-        <span class="copyright-text">© 2026 Government of India · Ministry of Road Transport &amp; Highways · All Rights Reserved</span>
-        <span class="version-info">System v2.1.0 · Parivahan Citizen · Live</span>
-    </footer>
+    </main>
 
     <script src="../js/data.js"></script>
     <script src="../js/dashboard.js"></script>
@@ -866,199 +128,121 @@
                     console.log('Table or VehicleData not available. Table:', !!tb, 'VehicleData:', !!window.VehicleData);
                     return;
                 }
-                
+
                 // Get authenticated user's vehicle from API
                 const auth = JSON.parse(localStorage.getItem('vehical_auth_data') || '{}');
                 const userVehicleNumber = auth.user?.vehicleNumber || auth.user?.username;
                 console.log('User vehicle number from auth (vehicleNumber or username):', userVehicleNumber);
                 console.log('Full auth data:', auth);
-                
+
                 if (!userVehicleNumber) {
                     tb.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#64748B;">No vehicle associated with your account</td></tr>';
                     return;
                 }
 
-                // Find vehicle in database
+                // Find vehicle in demo database (for table display only)
                 const normUserVehicle = userVehicleNumber.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                console.log('Normalized vehicle number:', normUserVehicle);
-                console.log('Total vehicles in database:', VehicleData.VEHICLES?.length);
-                
-                const vehicle = VehicleData.VEHICLES.find(v => {
+                const vehicle = (VehicleData.VEHICLES || []).find(v => {
                     const normReg = v.reg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                    console.log('Comparing:', normReg, 'with', normUserVehicle, 'Match:', normReg === normUserVehicle);
                     return normReg === normUserVehicle;
                 });
 
-                if (!vehicle) {
-                    console.log('Vehicle not found in database');
-                    tb.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#64748B;">Vehicle not found in database</td></tr>';
-                    return;
-                }
-                
-                console.log('Vehicle found:', vehicle);
+                // Get PUC and Insurance data from demo (only if vehicle found in demo data)
+                const puc = vehicle ? VehicleData.getPUCByReg(vehicle.reg) : null;
+                const policy = vehicle ? VehicleData.getPolicyByReg(vehicle.reg) : null;
 
-                // Get PUC and Insurance data
-                const puc = VehicleData.PUC_DATA.find(p => {
-                    const normReg = p.reg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                    return normReg === normUserVehicle;
-                });
-                const policy = VehicleData.POLICY_DATA.find(p => {
-                    const normReg = p.vehicleReg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                    return normReg === normUserVehicle;
-                });
-                console.log('PUC found:', !!puc, 'Policy found:', !!policy);
+                // Fetch challans from the backend database (always - independent of demo data)
+                fetch('/api/challan/vehicle?vehicleNo=' + encodeURIComponent(userVehicleNumber))
+                    .then(r => r.json())
+                    .then(result => {
+                        const challans = (result && result.success && Array.isArray(result.data)) ? result.data : [];
 
-                // Check for pending challans
-                const challanData = VehicleData.CHALLAN_DATA || [];
-                console.log('Challan data available:', challanData.length);
-                
-                // Log sample challans to see format
-                if (challanData.length > 0) {
-                    console.log('Sample challan:', challanData[0]);
-                }
-                
-                // Load paid challans from database API
-                // Note: This should be fetched from the backend API instead of localStorage
-                const paidChallans = []; // Will be populated from API
-                console.log('Paid challans from database API:', paidChallans);
-                
-                const pendingChallans = challanData.filter(c => {
-                    const normReg = c.vehicleReg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                    const isPaid = paidChallans.includes(c.challanNo);
-                    return normReg === normUserVehicle && c.status === 'Pending' && !isPaid;
-                });
-                console.log('Vehicle number:', normUserVehicle);
-                console.log('All challans:', challanData.length);
-                console.log('Pending challans for this vehicle:', pendingChallans.length);
-                console.log('Pending challan details:', pendingChallans);
+                        // Pending = status PENDING_PAYMENT and payment_status not Paid
+                        const pendingChallans = challans.filter(c => {
+                            const isPaid = (c.paymentStatus || '').toLowerCase() === 'paid' || c.status === 'PAID';
+                            return !isPaid;
+                        });
 
-                // Update pending challan count
-                const pendingCountEl = document.querySelector('.stat-card.danger .stat-value');
-                console.log('Pending count element found:', !!pendingCountEl);
-                if (pendingCountEl) {
-                    pendingCountEl.textContent = pendingChallans.length;
-                    console.log('Updated pending count to:', pendingChallans.length);
-                }
-                const pendingTrendEl = document.querySelector('.stat-card.danger .stat-trend');
-                console.log('Pending trend element found:', !!pendingTrendEl);
-                if (pendingTrendEl) {
-                    pendingTrendEl.textContent = pendingChallans.length > 0 ? 'Action Required' : 'Clean Record';
-                    console.log('Updated pending trend to:', pendingChallans.length > 0 ? 'Action Required' : 'Clean Record');
-                }
+                        // Update stats
+                        document.getElementById('vehicleCount').textContent = '1';
+                        document.getElementById('pendingChallanCount').textContent = pendingChallans.length;
+                        document.getElementById('challanTrend').textContent = pendingChallans.length > 0 ? pendingChallans.length + ' Pending' : 'Clean Record';
+                    })
+                    .catch(err => {
+                        console.error('Error fetching challans:', err);
+                        document.getElementById('pendingChallanCount').textContent = '0';
+                        document.getElementById('challanTrend').textContent = 'Clean Record';
+                    });
 
-                // Show/hide pay challan link based on pending challans
-                const payChallanLink = document.getElementById('payChallanLink');
-                if (payChallanLink) {
-                    if (pendingChallans.length > 0) {
-                        payChallanLink.style.display = 'flex';
-                        console.log('Pay challan link visible - pending challans:', pendingChallans.length);
+                // Update PUC status
+                if (puc) {
+                    const daysLeft = daysDiff(puc.validDateIso);
+                    if (daysLeft < 0) {
+                        document.getElementById('pucStatus').textContent = 'Expired';
+                        document.getElementById('pucStatus').parentElement.parentElement.className = 'stat-card danger';
+                        document.getElementById('pucTrend').textContent = 'Expired on ' + dmy(puc.validDateIso);
+                    } else if (daysLeft <= 30) {
+                        document.getElementById('pucStatus').textContent = 'Expiring';
+                        document.getElementById('pucStatus').parentElement.parentElement.className = 'stat-card warning';
+                        document.getElementById('pucTrend').textContent = 'Expires in ' + daysLeft + ' days';
                     } else {
-                        payChallanLink.style.display = 'none';
-                        console.log('Pay challan link hidden - no pending challans');
+                        document.getElementById('pucStatus').textContent = 'Valid';
+                        document.getElementById('pucTrend').textContent = 'Expires in ' + daysLeft + ' days';
                     }
-                } else {
-                    console.log('Pay challan link element not found');
                 }
 
-                const pucStatus = puc ? (puc.status === 'Pass' ? 'Valid' : 'Expired') : 'Not Available';
-                const pucValid = puc ? puc.validDateDMY : 'N/A';
-                const insuranceStatus = policy ? (policy.status === 'Issued' ? 'Active' : policy.status) : 'Not Available';
+                // Update Insurance status
+                if (policy) {
+                    const daysLeft = daysDiff(policy.endDateIso);
+                    if (daysLeft < 0) {
+                        document.getElementById('insuranceStatus').textContent = 'Expired';
+                        document.getElementById('insuranceStatus').parentElement.parentElement.className = 'stat-card danger';
+                        document.getElementById('insuranceTrend').textContent = 'Expired on ' + dmy(policy.endDateIso);
+                    } else if (daysLeft <= 45) {
+                        document.getElementById('insuranceStatus').textContent = 'Renewal Due';
+                        document.getElementById('insuranceStatus').parentElement.parentElement.className = 'stat-card warning';
+                        document.getElementById('insuranceTrend').textContent = 'Renews in ' + daysLeft + ' days';
+                    } else {
+                        document.getElementById('insuranceStatus').textContent = 'Active';
+                        document.getElementById('insuranceTrend').textContent = 'Renews in ' + daysLeft + ' days';
+                    }
+                }
 
-                const rowHtml = '<tr>' +
-                    '<td><strong>' + vehicle.reg + '</strong></td>' +
-                    '<td>' + vehicle.vehicleType + '</td>' +
-                    '<td>' + pucValid + '</td>' +
-                    '<td><span class="status-badge ' + (insuranceStatus === 'Active' ? 'valid' : 'warning') + '">' + insuranceStatus + '</span></td>' +
-                    '<td><span class="status-badge ' + (pucStatus === 'Valid' ? 'valid' : 'warning') + '">' + pucStatus + '</span></td>' +
-                    '</tr>';
-                
-                console.log('Generated row HTML:', rowHtml);
-                tb.innerHTML = rowHtml;
-                console.log('Table innerHTML set successfully');
-            }
+                // Populate vehicles table
+                if (vehicle) {
+                    const pucStatus = puc ? (puc.status === 'Pass' ? 'Valid' : puc.status) : 'N/A';
+                    const pucValidTill = puc ? dmy(puc.validDateIso) : 'N/A';
+                    const insuranceStatus = policy ? policy.status : 'N/A';
 
-            function populateRenewals(tbodyId) {
-                const tb = document.getElementById(tbodyId);
-                if (!tb) return;
-
-                const renewals = [
-                    { doc: 'PUC Certificate', vehicle: 'MH-02-AB-1234', expires: '2026-09-20', days: 45 },
-                    { doc: 'Insurance', vehicle: 'MH-02-AB-1234', expires: '2026-12-10', days: 126 }
-                ];
-
-                tb.innerHTML = renewals.map(function(r) {
-                    let badgeClass, badgeText;
-                    if (r.days <= 30) { badgeClass = 'expired'; badgeText = r.days + ' days'; }
-                    else if (r.days <= 60) { badgeClass = 'pending'; badgeText = r.days + ' days'; }
-                    else { badgeClass = 'valid'; badgeText = r.days + ' days'; }
-                    return '<tr>' +
-                        '<td><strong>' + r.doc + '</strong></td>' +
-                        '<td>' + r.vehicle + '</td>' +
-                        '<td>' + dmy(r.expires) + '</td>' +
-                        '<td><span class="status-badge ' + badgeClass + '">' + badgeText + '</span></td>' +
-                    '</tr>';
-                }).join('');
-            }
-
-            function populateActivity(listId) {
-                const ul = document.getElementById(listId);
-                if (!ul) return;
-
-                const activities = [
-                    { dot: 'success', text: 'PUC certificate renewed for <strong>MH-02-AB-1234</strong>', time: '5 days ago' },
-                    { dot: 'success', text: 'Insurance premium paid for <strong>MH-02-AB-1234</strong>', time: '15 days ago' },
-                    { dot: 'warning', text: 'Vehicle verification completed via <strong>Parivahan</strong>', time: '1 month ago' },
-                    { dot: 'success', text: 'Driving license verified successfully', time: '2 months ago' }
-                ];
-
-                ul.innerHTML = activities.map(function(x) {
-                    return '<li class="activity-item">' +
-                        '<span class="activity-dot ' + x.dot + '"></span>' +
-                        '<div class="activity-content">' +
-                            '<div class="activity-text">' + x.text + '</div>' +
-                            '<div class="activity-time">' + x.time + '</div>' +
-                        '</div>' +
-                    '</li>';
-                }).join('');
-            }
-
-            function handleLogout() {
-                if (confirm('Are you sure you want to logout?')) {
-                    localStorage.removeItem('vehical_auth_data');
-                    window.location.href = '../login.html';
+                    tb.innerHTML = `
+                        <tr>
+                            <td><strong>${vehicle.reg}</strong></td>
+                            <td>${vehicle.vehicleType}</td>
+                            <td>${pucValidTill}</td>
+                            <td>${insuranceStatus}</td>
+                            <td><span class="status-badge ${pucStatus === 'Valid' ? 'valid' : (pucStatus === 'Expired' ? 'expired' : 'pending')}">${pucStatus}</span></td>
+                        </tr>
+                    `;
+                } else {
+                    // Vehicle not in demo data but exists in Oracle DB (citizen login succeeded)
+                    tb.innerHTML = `
+                        <tr>
+                            <td><strong>${userVehicleNumber}</strong></td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td><span class="status-badge valid">Active</span></td>
+                        </tr>
+                    `;
                 }
             }
 
             document.addEventListener('DOMContentLoaded', function() {
-                // Simple auth check
-                const auth = JSON.parse(localStorage.getItem('vehical_auth_data') || '{}');
-                if (!auth.user) {
-                    window.location.href = '../login.html';
-                    return;
-                }
-
-                // Add logout button event listener
-                const logoutBtn = document.getElementById('logoutBtn');
-                if (logoutBtn) {
-                    logoutBtn.addEventListener('click', handleLogout);
-                }
-                
-                // Set active menu item
-                const currentPage = window.location.pathname.split('/').pop();
-                document.querySelectorAll('.menu-item').forEach(item => {
-                    const href = item.getAttribute('href');
-                    if (href === currentPage || href.endsWith(currentPage)) {
-                        item.classList.add('active');
-                    }
-                });
-                
-                // Wait for data to load before populating
-                setTimeout(() => {
-                    console.log('Starting to populate data...');
+                // Initialize dashboard with citizen role
+                const auth = DashboardApp.init(['CITIZEN'], 'Citizen Portal', 'overview');
+                if (auth) {
                     populateMyVehicles('myVehiclesTbody');
-                    populateRenewals('renewalsTbody');
-                    populateActivity('activityLogList');
-                }, 200);
+                }
             });
         })();
     </script>

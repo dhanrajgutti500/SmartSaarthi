@@ -1,6 +1,6 @@
 /* ============================================
    RESPONSIVE DASHBOARD CSS
-   SmartSaarthi - RTO/Police Vehicle Management System
+   Smart Saarthi - RTO/Police Vehicle Management System
    ============================================ */
 
 :root {
@@ -37,6 +37,8 @@ html, body {
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -50,6 +52,7 @@ body {
 img {
     max-width: 100%;
     height: auto;
+    display: block;
 }
 
 video {
@@ -57,6 +60,17 @@ video {
     max-width: 100%;
     height: auto;
     object-fit: cover;
+}
+
+/* Touch-friendly tap targets */
+button, a, input, select, textarea {
+    min-height: 44px;
+    touch-action: manipulation;
+}
+
+/* Responsive text sizing */
+html {
+    font-size: 16px;
 }
 
 /* ============================================
@@ -367,16 +381,19 @@ video {
     margin-left: 260px;
     width: calc(100% - 260px);
     min-height: calc(100vh - 70px);
+    padding-top: 70px;
     transition: margin-left 0.3s ease, width 0.3s ease;
+    overflow: visible;
 }
 
 .main-content .layout {
     max-width: 1400px;
     width: 100%;
     margin: 0 auto;
-    padding: 28px 32px;
+    padding: 28px 32px 40px 32px;
     flex: 1;
     box-sizing: border-box;
+    overflow: visible;
 }
 
 /* ============================================
@@ -432,6 +449,16 @@ video {
     align-items: center;
     justify-content: space-between;
     border-left: 5px solid var(--gold-primary);
+    overflow: hidden;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.welcome-bar > div:first-child {
+    min-width: 0;
+    flex: 1;
+    overflow: visible;
 }
 
 .welcome-bar h2 {
@@ -450,6 +477,8 @@ video {
     text-align: right;
     font-size: 12px;
     color: var(--text-muted);
+    flex-shrink: 0;
+    margin-left: 20px;
 }
 
 .timestamp .date {
@@ -858,6 +887,7 @@ video {
     .main-content {
         margin-left: 220px;
         width: calc(100% - 220px);
+        padding-top: 70px;
     }
     
     .main-content .layout {
@@ -928,12 +958,13 @@ video {
     .sidebar-overlay.visible {
         display: block;
     }
-    
+
     .main-content {
         margin-left: 0;
         width: 100%;
+        padding-top: 64px;
     }
-    
+
     .main-content .layout {
         padding: 20px 24px;
     }
@@ -1032,12 +1063,13 @@ video {
     .sidebar-overlay.visible {
         display: block;
     }
-    
+
     .main-content {
         margin-left: 0;
         width: 100%;
+        padding-top: 60px;
     }
-    
+
     .main-content .layout {
         padding: 16px 18px;
     }
@@ -1124,6 +1156,10 @@ video {
         max-width: 280px;
     }
     
+    .main-content {
+        padding-top: 56px;
+    }
+
     .main-content .layout {
         padding: 14px 16px;
     }
@@ -1170,7 +1206,11 @@ video {
     .navbar-content {
         padding: 0 10px;
     }
-    
+
+    .main-content {
+        padding-top: 56px;
+    }
+
     .main-content .layout {
         padding: 12px 14px;
     }
@@ -1323,5 +1363,154 @@ video {
     
     .func-page-desc {
         font-size: 13px;
+    }
+}
+
+/* ============================================
+   GLOBAL RESPONSIVE UTILITIES
+   ============================================ */
+
+/* Container for responsive content */
+.responsive-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+/* Responsive typography */
+@media (max-width: 480px) {
+    html {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+    html {
+        font-size: 15px;
+    }
+}
+
+@media (min-width: 1200px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+/* Force all containers to be responsive */
+.page-container,
+.content-wrapper,
+.main-wrapper,
+.dashboard-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Ensure tables don't overflow */
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+/* Responsive form inputs */
+@media (max-width: 767px) {
+    .form-row,
+    .input-row {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .form-group,
+    .input-group {
+        width: 100%;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+        width: 100%;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+}
+
+/* Responsive buttons */
+@media (max-width: 767px) {
+    .btn,
+    button,
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 48px;
+        font-size: 16px;
+    }
+    
+    .btn-group,
+    .action-group {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+    }
+}
+
+/* Responsive cards */
+@media (max-width: 767px) {
+    .card,
+    .panel,
+    .info-card {
+        border-radius: 12px;
+        padding: 16px;
+    }
+}
+
+/* Hide non-essential elements on mobile */
+@media (max-width: 767px) {
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .mobile-only {
+        display: none !important;
+    }
+}
+
+/* Scrollbar styling for touch devices */
+@media (hover: none) and (pointer: coarse) {
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
     }
 }

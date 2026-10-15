@@ -247,7 +247,7 @@
                 const auth = JSON.parse(localStorage.getItem('vehical_auth_data') || '{}');
                 const vehicleNumber = auth.user?.vehicleNumber || auth.user?.username;
                 console.log('User vehicle number (vehicleNumber or username):', vehicleNumber);
-                
+
                 if (!vehicleNumber) {
                     document.getElementById('challanList').innerHTML = `
                         <div class="no-challan">
@@ -259,88 +259,78 @@
                     return;
                 }
 
-                if (!window.VehicleData || !VehicleData.CHALLAN_DATA) {
-                    console.log('VehicleData:', !!window.VehicleData, 'CHALLAN_DATA:', !!(window.VehicleData && VehicleData.CHALLAN_DATA));
-                    document.getElementById('challanList').innerHTML = `
-                        <div class="no-challan">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                            <h3>Data Not Available</h3>
-                            <p>Challan data is not available at this time</p>
-                        </div>
-                    `;
-                    return;
-                }
+                const listEl = document.getElementById('challanList');
+                listEl.innerHTML = `
+                    <div class="no-challan">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        <h3>Loading...</h3>
+                        <p>Fetching your challan records</p>
+                    </div>
+                `;
 
-                const normVehicle = vehicleNumber.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                console.log('Normalized vehicle number:', normVehicle);
-                console.log('Total challans in database:', VehicleData.CHALLAN_DATA.length);
-                
-                // Log first few challans to see format
-                console.log('Sample challans from database:');
-                VehicleData.CHALLAN_DATA.slice(0, 5).forEach(c => {
-                    console.log('  -', c.challanNo, 'Vehicle:', c.vehicleReg, 'Status:', c.status);
-                });
-                
-                // Load paid challans from database API
-                // Note: This should be fetched from the backend API instead of localStorage
-                const paidChallans = []; // Will be populated from API
-                console.log('Paid challans from database API:', paidChallans);
-                
-                const pendingChallans = VehicleData.CHALLAN_DATA.filter(c => {
-                    const normReg = c.vehicleReg.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-                    const isPaid = paidChallans.includes(c.challanNo);
-                    const match = normReg === normVehicle && c.status === 'Pending' && !isPaid;
-                    if (match) {
-                        console.log('Found matching challan:', c.challanNo, 'Vehicle:', c.vehicleReg);
-                    }
-                    return match;
-                });
-                console.log('Pending challans found:', pendingChallans.length);
+                fetch('/api/challan/vehicle?vehicleNo=' + encodeURIComponent(vehicleNumber))
+                    .then(r => r.json())
+                    .then(result => {
+                        const allChallans = (result && result.success && Array.isArray(result.data)) ? result.data : [];
 
-                if (pendingChallans.length === 0) {
-                    document.getElementById('challanList').innerHTML = `
-                        <div class="no-challan">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                            <h3>No Pending Challans</h3>
-                            <p>Great! You have no pending challans to pay</p>
-                        </div>
-                    `;
-                    return;
-                }
+                        const pendingChallans = allChallans.filter(c => {
+                            const isPaid = (c.paymentStatus || '').toLowerCase() === 'paid' || c.status === 'PAID';
+                            return !isPaid;
+                        });
 
-                const html = pendingChallans.map(challan => `
-                    <div class="challan-card" id="challan_${challan.challanNo}">
+                        console.log('Pending challans found:', pendingChallans.length);
+
+                        if (pendingChallans.length === 0) {
+                            listEl.innerHTML = `
+                                <div class="no-challan">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                    <h3>No Pending Challans</h3>
+                                    <p>Great! You have no pending challans to pay</p>
+                                </div>
+                            `;
+                            return;
+                        }
+
+                        const html = pendingChallans.map(challan => {
+                            // Format date from YYYY-MM-DD to DD-MM-YYYY
+                            let dateStr = challan.challanDate || '';
+                            if (dateStr) {
+                                const parts = dateStr.split('-');
+                                if (parts.length === 3) dateStr = parts[2] + '-' + parts[1] + '-' + parts[0];
+                            }
+                            return `
+                    <div class="challan-card" id="challan_${challan.challanNumber}">
                         <div class="challan-header">
                             <div>
-                                <div class="challan-title">${challan.violation}</div>
-                                <div class="challan-number">${challan.challanNo}</div>
+                                <div class="challan-title">${challan.violationName || 'Traffic Violation'}</div>
+                                <div class="challan-number">${challan.challanNumber}</div>
                             </div>
                             <span class="challan-status status-pending">Pending</span>
                         </div>
-                        
+
                         <div class="info-grid">
                             <div>
                                 <div class="info-label">Vehicle Number</div>
-                                <div class="info-value">${challan.vehicleReg}</div>
+                                <div class="info-value">${challan.vehicleNo}</div>
                             </div>
                             <div>
                                 <div class="info-label">Issue Date</div>
-                                <div class="info-value">${challan.issueDateDMY}</div>
+                                <div class="info-value">${dateStr}</div>
                             </div>
                             <div>
                                 <div class="info-label">Location</div>
-                                <div class="info-value">${challan.location}</div>
+                                <div class="info-value">${challan.location || 'N/A'}</div>
                             </div>
                             <div>
-                                <div class="info-label">Owner Name</div>
-                                <div class="info-value">${challan.ownerName}</div>
+                                <div class="info-label">Officer ID</div>
+                                <div class="info-value">${challan.officerId || 'N/A'}</div>
                             </div>
                         </div>
 
                         <div class="amount-section">
                             <div class="amount-row">
                                 <span class="amount-label">Fine Amount</span>
-                                <span class="amount-value">₹ ${challan.fineAmount}</span>
+                                <span class="amount-value">₹ ${challan.totalFineAmount}</span>
                             </div>
                             <div class="amount-row">
                                 <span class="amount-label">Late Fee</span>
@@ -348,75 +338,109 @@
                             </div>
                             <div class="amount-row">
                                 <span class="amount-label">Total Amount</span>
-                                <span class="amount-value total">₹ ${challan.fineAmount}</span>
+                                <span class="amount-value total">₹ ${challan.totalFineAmount}</span>
                             </div>
                         </div>
 
-                        <div style="margin-top: 20px; text-align: right;" id="actions_${challan.challanNo}">
-                            <button class="pay-btn" onclick="payChallan('${challan.challanNo}', ${challan.fineAmount})">
+                        <div style="margin-top: 20px; text-align: right;" id="actions_${challan.challanNumber}">
+                            <button class="pay-btn" onclick="payChallan('${challan.challanNumber}', ${challan.totalFineAmount})">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                                 Pay Now
                             </button>
                         </div>
                     </div>
-                `).join('');
+                `;
+                        }).join('');
 
-                document.getElementById('challanList').innerHTML = html;
+                        listEl.innerHTML = html;
+                    })
+                    .catch(err => {
+                        console.error('Error loading challans:', err);
+                        listEl.innerHTML = `
+                            <div class="no-challan">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                <h3>Unable to Load</h3>
+                                <p>Could not fetch challan records. Please try again later.</p>
+                            </div>
+                        `;
+                    });
             }
 
-            window.payChallan = function(challanNo, amount) {
+            window.payChallan = async function(challanNo, amount) {
                 if (!confirm(`Are you sure you want to pay ₹${amount} for challan ${challanNo}?`)) {
                     return;
                 }
 
-                // Get vehicle number for API call
                 const auth = JSON.parse(localStorage.getItem('vehical_auth_data') || '{}');
                 const vehicleNumber = auth.user?.vehicleNumber || auth.user?.username;
-                const normVehicle = vehicleNumber.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
 
-                // Update paid challan status via API
-                // Note: This should call the backend API to update challan status
-                console.log('Updating challan status via API:', challanNo, 'for vehicle:', vehicleNumber);
-                // API call would be: fetch('/api/challan/pay', { method: 'POST', body: JSON.stringify({ challanNo, vehicleNumber }) })
+                // Disable pay button
+                const payBtn = document.querySelector(`#actions_${challanNo} .pay-btn`);
+                if (payBtn) {
+                    payBtn.disabled = true;
+                    payBtn.textContent = 'Processing...';
+                }
 
-                // Find and update challan status
-                const challan = VehicleData.CHALLAN_DATA.find(c => c.challanNo === challanNo);
-                if (challan) {
-                    challan.status = 'Paid';
-                    challan.paidDateIso = new Date().toISOString().slice(0, 10);
-                    
-                    // Update UI
-                    const card = document.getElementById('challan_' + challanNo);
-                    if (card) {
-                        const statusBadge = card.querySelector('.challan-status');
-                        statusBadge.className = 'challan-status status-paid';
-                        statusBadge.textContent = 'Paid';
-                        
-                        const payBtn = card.querySelector('.pay-btn');
-                        payBtn.disabled = true;
-                        payBtn.textContent = 'Paid';
-                    }
+                try {
+                    // Call backend API to update challan status in database
+                    const response = await fetch('/api/challan/pay', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            challanNumber: challanNo,
+                            vehicleNumber: vehicleNumber
+                        })
+                    });
 
-                    alert('Challan paid successfully! Receipt will be sent to your registered mobile.');
-                    
-                    // Show receipt button
-                    const actionsDiv = document.getElementById('actions_' + challanNo);
-                    if (actionsDiv) {
-                        const receiptBtn = document.createElement('button');
-                        receiptBtn.className = 'pay-btn';
-                        receiptBtn.style.marginTop = '10px';
-                        receiptBtn.style.marginLeft = '10px';
-                        receiptBtn.style.background = '#1a5f7a';
-                        receiptBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> View Receipt';
-                        receiptBtn.onclick = () => {
-                            const challan = VehicleData.CHALLAN_DATA.find(c => c.challanNo === challanNo);
-                            if (challan) {
-                                const receiptUrl = `challan-receipt.html?challanNo=${challan.challanNo}&vehicleNo=${challan.vehicleReg}&amount=${challan.fineAmount}&violatorName=${encodeURIComponent(challan.ownerName)}&violationType=${encodeURIComponent(challan.violation)}&challanDate=${challan.issueDateDMY}`;
-                                window.open(receiptUrl, '_blank');
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Update UI
+                        const card = document.getElementById('challan_' + challanNo);
+                        if (card) {
+                            const statusBadge = card.querySelector('.challan-status');
+                            statusBadge.className = 'challan-status status-paid';
+                            statusBadge.textContent = 'Paid';
+
+                            if (payBtn) {
+                                payBtn.textContent = 'Paid';
+                                payBtn.style.background = '#16a34a';
                             }
-                        };
-                        actionsDiv.appendChild(receiptBtn);
+                        }
+
+                        alert('Challan paid successfully! Receipt will be sent to your registered mobile.');
+
+                        // Show receipt button
+                        const actionsDiv = document.getElementById('actions_' + challanNo);
+                        if (actionsDiv) {
+                            const receiptBtn = document.createElement('button');
+                            receiptBtn.className = 'pay-btn';
+                            receiptBtn.style.marginTop = '10px';
+                            receiptBtn.style.marginLeft = '10px';
+                            receiptBtn.style.background = '#1a5f7a';
+                            receiptBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> View Receipt';
+                            receiptBtn.onclick = () => {
+                                const receiptUrl = `challan-receipt.html?challanNo=${encodeURIComponent(challanNo)}&vehicleNo=${encodeURIComponent(vehicleNumber)}&amount=${amount}`;
+                                window.open(receiptUrl, '_blank');
+                            };
+                            actionsDiv.appendChild(receiptBtn);
+                        }
+                    } else {
+                        if (payBtn) {
+                            payBtn.disabled = false;
+                            payBtn.textContent = 'Pay Now';
+                        }
+                        alert('Payment failed: ' + result.message);
                     }
+                } catch (error) {
+                    console.error('Payment error:', error);
+                    if (payBtn) {
+                        payBtn.disabled = false;
+                        payBtn.textContent = 'Pay Now';
+                    }
+                    alert('Payment failed: Unable to connect to server. Please check your connection.');
                 }
             };
         })();
